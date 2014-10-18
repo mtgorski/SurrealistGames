@@ -1,0 +1,64 @@
+﻿@using System.Web.Script.Services
+@{
+    ViewBag.Title = "Play";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6">
+            <h2>Q &amp; A</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-8 col-sm-offset-1 well">
+            <p class="lead">Q : <span id="question"></span></p>
+            <p class="lead">A : <span id="answer"></span></p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-8 col-sm-offset-1 well">
+            <div class="col-xs-6">
+
+                <form id="prefixForm">
+                    <div class="form-group input-group">
+                        <label for="prefix">
+                            Question
+                        </label>
+                        @Html.TextBox("prefix", "", new { id = "prefix", @class = "form-control" })
+
+                    </div>
+                    <button class="btn btn-success">Submit</button>
+                </form>
+
+            </div>
+            <div class="col-xs-6">
+                <form id="suffixForm">
+                    <div class="form-group input-group">
+                        <label for="suffix">
+                            Answer
+                        </label>
+                        @Html.TextBox("suffix", "", new { id = "suffix", @class = "form-control" })
+
+                    </div>
+                    <button class="btn btn-success">Submit</button>
+                </form>
+
+            </div>
+        </div>
+            
+        
+
+    </div>
+</div>
+
+
+@section scripts
+{
+
+    <script src="~/Scripts/jquery.validate.js"></script>
+
+    <script src="~/Scripts/jquery-validate-defaults.js"></script>
+    <script src="~/Scripts/playQuestionGame.js"></script>
+}

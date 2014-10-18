@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Question and Answer";
+}
+
+<div class="container">
+    
+    <div class="row">
+        <div class="col-xs-6">
+            <h2>Q &amp; A</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-8 col-sm-offset-1 well">
+            <p class="lead">Q : <span id="question"></span></p>
+            <p class="lead">A : <span id="answer"></span></p>
+            <button class="btn btn-primary" onclick="return onRefreshClick()">Refresh</button>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        function onRefreshClick() {
+            $.ajax(
+            {
+                url: '/QuestionGame/GetRandomOutcome',
+                method: 'GET',
+                cache: false,
+                success: function (data, textStatus, jqXHR) {
+                    $('#question').html(data.QuestionPrefix.Content);
+                    $('#answer').html(data.QuestionSuffix.Content);
+                }
+            });
+        }
+    </script>
+}
