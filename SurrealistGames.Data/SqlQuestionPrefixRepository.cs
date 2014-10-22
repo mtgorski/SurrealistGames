@@ -71,7 +71,7 @@ namespace SurrealistGames.Repositories
             using (
                 var cn =
                     new SqlConnection(
-                        @"Data Source=(localdb)\v11.0;Initial Catalog=SurrealistGamesDev;Integrated Security=True"))
+                        Settings.GetConnectionString()))
             {
                 var cmd = new SqlCommand();
                 cmd.CommandText = "QuestionPrefix_Insert";
