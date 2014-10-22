@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using SurrealistGames.Models;
 using SurrealistGames.Models.Interfaces;
 using SurrealistGames.Utility;
 
-namespace SurrealistGames.Repositories.Mocks
+namespace SurrealistGames.Data.Mocks
 {
     public class MockQuestionPrefixRepository : IQuestionPrefixRepository
     {

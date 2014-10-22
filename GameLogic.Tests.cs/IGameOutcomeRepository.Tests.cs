@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using SurrealistGames.Data.Mocks;
+using SurrealistGames.GameLogic.GameLogic;
 using SurrealistGames.Models;
-using SurrealistGames.Repositories;
 using SurrealistGames.Repositories.Mocks;
 using SurrealistGames.Utility;
-using SurrealistGames.GameLogic;
-    
+
 namespace Repositories.Tests.cs
 {
     [TestFixture]

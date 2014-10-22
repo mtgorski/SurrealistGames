@@ -3,10 +3,10 @@ using SurrealistGames.Models.Interfaces;
 using SurrealistGames.Repositories;
 using SurrealistGames.Utility;
 
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(SurrealistGames.App_Start.NinjectWebCommon), "Start")]
-[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(SurrealistGames.App_Start.NinjectWebCommon), "Stop")]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(SurrealistGames.WebUI.App_Start.NinjectWebCommon), "Start")]
+[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(SurrealistGames.WebUI.App_Start.NinjectWebCommon), "Stop")]
 
-namespace SurrealistGames.App_Start
+namespace SurrealistGames.WebUI.App_Start
 {
     using System;
     using System.Web;
@@ -73,8 +73,6 @@ namespace SurrealistGames.App_Start
             kernel.Bind<IQuestionPrefixFormatter>().To<QuestionFormatter>();
             kernel.Bind<IQuestionSuffixValidator>().To<AnswerValidator>();
             kernel.Bind<IQuestionSuffixFormatter>().To<AnswerFormatter>();
-
-
         }        
     }
 }

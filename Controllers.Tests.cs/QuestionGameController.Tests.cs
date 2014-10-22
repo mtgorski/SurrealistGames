@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Helpers;
-using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
-using SurrealistGames.Controllers;
 using SurrealistGames.GameLogic;
 using SurrealistGames.Models;
 using SurrealistGames.Models.Interfaces;
-using SurrealistGames.Repositories.Mocks;
 using SurrealistGames.Utility;
+using SurrealistGames.WebUI.Controllers;
 
 namespace Controllers.Tests.cs
 {

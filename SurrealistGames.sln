@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurrealistGames", "SurrealistGames\SurrealistGames.csproj", "{4B0A29F9-234B-4918-BAEF-2B498B26E9D8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories.Tests.cs", "Repositories.Tests.cs\Repositories.Tests.cs.csproj", "{830A93F3-B171-49F1-82B9-5C5BA66B2AB3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLogic.Tests.cs", "GameLogic.Tests.cs\GameLogic.Tests.cs.csproj", "{2214142A-38BF-4BB3-8A4F-39207FCAA30D}"
@@ -13,16 +11,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controllers.Tests.cs", "Con
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurrealistGames.WebUI", "SurrealistGames.WebUI\SurrealistGames.WebUI.csproj", "{53B8239B-8FBA-4F1E-B7FC-6D9B3043C289}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurrealistGames.Models", "SurrealistGames.Models\SurrealistGames.Models.csproj", "{6958FF9F-650B-40FD-91B8-26AA1F1C943E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurrealistGames.Data", "SurrealistGames.Data\SurrealistGames.Data.csproj", "{760CCA44-3B3C-470D-B0E0-F4E970762299}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurrealistGames.GameLogic", "SurrealistGames.GameLogic\SurrealistGames.GameLogic.csproj", "{3C52E40A-AE45-47E0-8016-1D9394E95D95}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4B0A29F9-234B-4918-BAEF-2B498B26E9D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4B0A29F9-234B-4918-BAEF-2B498B26E9D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4B0A29F9-234B-4918-BAEF-2B498B26E9D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4B0A29F9-234B-4918-BAEF-2B498B26E9D8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{830A93F3-B171-49F1-82B9-5C5BA66B2AB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{830A93F3-B171-49F1-82B9-5C5BA66B2AB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{830A93F3-B171-49F1-82B9-5C5BA66B2AB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +39,18 @@ Global
 		{53B8239B-8FBA-4F1E-B7FC-6D9B3043C289}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53B8239B-8FBA-4F1E-B7FC-6D9B3043C289}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53B8239B-8FBA-4F1E-B7FC-6D9B3043C289}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6958FF9F-650B-40FD-91B8-26AA1F1C943E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6958FF9F-650B-40FD-91B8-26AA1F1C943E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6958FF9F-650B-40FD-91B8-26AA1F1C943E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6958FF9F-650B-40FD-91B8-26AA1F1C943E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{760CCA44-3B3C-470D-B0E0-F4E970762299}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{760CCA44-3B3C-470D-B0E0-F4E970762299}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{760CCA44-3B3C-470D-B0E0-F4E970762299}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{760CCA44-3B3C-470D-B0E0-F4E970762299}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C52E40A-AE45-47E0-8016-1D9394E95D95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C52E40A-AE45-47E0-8016-1D9394E95D95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C52E40A-AE45-47E0-8016-1D9394E95D95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C52E40A-AE45-47E0-8016-1D9394E95D95}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

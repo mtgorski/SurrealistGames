@@ -121,44 +121,18 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery-validate-defaults.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\playQuestionGame.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\QuestionGameController.cs" />
-    <Compile Include="GameLogic\AnswerFormatter.cs" />
-    <Compile Include="GameLogic\AnswerValidator.cs" />
-    <Compile Include="GameLogic\IQuestionPrefixFormatter.cs" />
-    <Compile Include="GameLogic\IQuestionPrefixValidator.cs" />
-    <Compile Include="GameLogic\IQuestionSuffixFormatter.cs" />
-    <Compile Include="GameLogic\IQuestionSuffixValidator.cs" />
-    <Compile Include="GameLogic\QuestionFormatter.cs" />
-    <Compile Include="GameLogic\QuestionValidator.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Interfaces\IQuestionPrefixRepository.cs" />
-    <Compile Include="Models\Interfaces\IQuestionSuffixRepository.cs" />
-    <Compile Include="Models\QuestionGameOutcome.cs" />
-    <Compile Include="Models\QuestionPrefix.cs" />
-    <Compile Include="Models\QuestionSuffix.cs" />
-    <Compile Include="Models\SubmitContentResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\Mocks\MockQuestionPrefixRepository.cs" />
-    <Compile Include="Repositories\Mocks\MockQuestionSuffixRepository.cs" />
-    <Compile Include="GameLogic\QuestionGameOutcomeGenerator.cs" />
-    <Compile Include="Repositories\Settings.cs" />
-    <Compile Include="Repositories\SqlQuestionPrefixRepository.cs" />
-    <Compile Include="Repositories\SqlQuestionSuffixRepository.cs" />
-    <Compile Include="Utility\IRandomBehavior.cs" />
-    <Compile Include="Utility\MockRandomBehavior.cs" />
-    <Compile Include="Utility\RandomBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -166,12 +140,10 @@
     <Content Include="README.md" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\QuestionGame\Play.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\QuestionGame\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -181,6 +153,21 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SurrealistGames.Data\SurrealistGames.Data.csproj">
+      <Project>{760CCA44-3B3C-470D-B0E0-F4E970762299}</Project>
+      <Name>SurrealistGames.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SurrealistGames.GameLogic\SurrealistGames.GameLogic.csproj">
+      <Project>{3C52E40A-AE45-47E0-8016-1D9394E95D95}</Project>
+      <Name>SurrealistGames.GameLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SurrealistGames.Models\SurrealistGames.Models.csproj">
+      <Project>{6958FF9F-650B-40FD-91B8-26AA1F1C943E}</Project>
+      <Name>SurrealistGames.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

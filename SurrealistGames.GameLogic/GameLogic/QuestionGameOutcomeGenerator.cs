@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using SurrealistGames.Models;
+﻿using SurrealistGames.Models;
 using SurrealistGames.Models.Interfaces;
 
-
-namespace SurrealistGames.GameLogic
+namespace SurrealistGames.GameLogic.GameLogic
 {
     public class QuestionGameOutcomeGenerator
     {

@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.DynamicData;
+﻿using System.Linq;
 using System.Web.Mvc;
 using SurrealistGames.GameLogic;
+using SurrealistGames.GameLogic.GameLogic;
 using SurrealistGames.Models;
 using SurrealistGames.Models.Interfaces;
-using SurrealistGames.Repositories;
-using SurrealistGames.Repositories.Mocks;
-using SurrealistGames.Utility;
 
-namespace SurrealistGames.Controllers
+namespace SurrealistGames.WebUI.Controllers
 {
     public class QuestionGameController : Controller
     {
