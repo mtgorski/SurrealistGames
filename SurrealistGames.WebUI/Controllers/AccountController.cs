@@ -10,6 +10,8 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Owin;
+using SurrealistGames.Models;
+using SurrealistGames.Models.Interfaces;
 using SurrealistGames.WebUI.Models;
 
 namespace SurrealistGames.WebUI.Controllers
@@ -18,9 +20,11 @@ namespace SurrealistGames.WebUI.Controllers
     public class AccountController : Controller
     {
         private ApplicationUserManager _userManager;
+        private IUserInfoRepo _userInfoRepo;
 
-        public AccountController()
+        public AccountController(IUserInfoRepo userInfo)
         {
+            _userInfoRepo = userInfo;
         }
 
         public AccountController(ApplicationUserManager userManager)
@@ -94,6 +98,7 @@ namespace SurrealistGames.WebUI.Controllers
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    _userInfoRepo.Add( new UserInfo() { Id = user.Id});
                     await SignInAsync(user, isPersistent: false);
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771

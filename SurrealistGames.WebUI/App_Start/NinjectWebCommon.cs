@@ -1,3 +1,4 @@
+using SurrealistGames.Data.Mocks;
 using SurrealistGames.GameLogic;
 using SurrealistGames.Models.Interfaces;
 using SurrealistGames.Repositories;
@@ -73,6 +74,8 @@ namespace SurrealistGames.WebUI.App_Start
             kernel.Bind<IQuestionPrefixFormatter>().To<QuestionFormatter>();
             kernel.Bind<IQuestionSuffixValidator>().To<AnswerValidator>();
             kernel.Bind<IQuestionSuffixFormatter>().To<AnswerFormatter>();
+
+            kernel.Bind<IUserInfoRepo>().To<MockUserInfoRepo>();
         }        
     }
 }
