@@ -45,7 +45,9 @@
     <Compile Include="QuestionGameOutcome.cs" />
     <Compile Include="QuestionPrefix.cs" />
     <Compile Include="QuestionSuffix.cs" />
+    <Compile Include="SavedQuestionGameResult.cs" />
     <Compile Include="SubmitContentResult.cs" />
+    <Compile Include="UserInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
