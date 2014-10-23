@@ -57,3 +57,27 @@ begin transaction
 								from RandomQuestionSuffix ));
 commit transaction
 go
+
+create procedure UserInfo_Insert
+(
+	@Id nvarchar(128)
+)
+as
+begin transaction
+	insert into UserInfo(Id)
+	values (@Id)
+commit transaction
+go
+
+create procedure SavedQuestion_Insert
+(
+	@QuestionPrefixId int,
+	@QuestionSuffixId int,
+	@UserInfoId int
+)
+as
+begin transaction
+	insert into SavedQuestionGameResult(QuestionPrefixId, QuestionSuffixId, UserInfoId)
+	values (@QuestionPrefixId, @QuestionSuffixId, @UserInfoId)
+commit transaction
+go
