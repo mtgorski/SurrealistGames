@@ -47,6 +47,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="SqlQuestionPrefixRepository.cs" />
     <Compile Include="SqlQuestionSuffixRepository.cs" />
+    <Compile Include="SqlUserInfoRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SurrealistGames.GameLogic\SurrealistGames.GameLogic.csproj">
