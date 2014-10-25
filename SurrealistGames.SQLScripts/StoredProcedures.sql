@@ -76,10 +76,18 @@ create procedure SavedQuestion_Insert
 	@UserInfoId int
 )
 as
-begin transaction
-	insert into SavedQuestionGameResult(QuestionPrefixId, QuestionSuffixId, UserInfoId)
-	values (@QuestionPrefixId, @QuestionSuffixId, @UserInfoId)
-commit transaction
+declare @AlreadySaved bit
+
+if not exists(select * from SavedQuestionGameResult 
+							where QuestionPrefixId = @QuestionPrefixId
+							and QuestionSuffixId = @QuestionPrefixId
+							and UserInfoId = @UserInfoId)
+begin
+	begin transaction
+		insert into SavedQuestionGameResult(QuestionPrefixId, QuestionSuffixId, UserInfoId)
+		values (@QuestionPrefixId, @QuestionSuffixId, @UserInfoId)
+	commit transaction
+end
 go
 
 create procedure UserInfo_GetByAspId
