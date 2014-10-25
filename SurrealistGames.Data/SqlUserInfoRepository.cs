@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SurrealistGames.Models;
 using SurrealistGames.Models.Interfaces;
 using SurrealistGames.Repositories;
 
@@ -32,7 +33,35 @@ namespace SurrealistGames.Data
 
         public Models.UserInfo GetByAspId(string aspNetId)
         {
-            throw new NotImplementedException();
+            var result = new UserInfo();
+
+            using (var cn = new SqlConnection(Settings.GetConnectionString()))
+            {
+                var cmd = new SqlCommand()
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "UserInfo_GetByAspId",
+                    Connection = cn
+                };
+
+                cmd.Parameters.AddWithValue("@AspId", aspNetId);
+
+                using (var dr = cmd.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        result.UserInfoId = (int) dr["UserInfoId"];
+                        result.Id = dr["Id"].ToString();
+                    }
+                    else
+                    {
+                        result = null;
+                    }
+                }
+
+            }
+
+            return result;
         }
     }
 }

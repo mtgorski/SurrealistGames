@@ -81,3 +81,11 @@ begin transaction
 	values (@QuestionPrefixId, @QuestionSuffixId, @UserInfoId)
 commit transaction
 go
+
+create procedure UserInfo_GetByAspId
+(
+	@AspId nvarchar(128)
+)
+as 
+ select * from UserInfo where Id = @AspId
+go
