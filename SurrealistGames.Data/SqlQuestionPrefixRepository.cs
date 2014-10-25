@@ -58,7 +58,7 @@ namespace SurrealistGames.Repositories
                             questionResultSetIsEmpty = false;
                         }
                         result.Content = dr["QuestionPrefixContent"].ToString();
-                        result.Id = (int)dr["QuestionPrefixId"];
+                        result.QuestionPrefixId = (int)dr["QuestionPrefixId"];
                     } 
                 } while (questionResultSetIsEmpty);
             }

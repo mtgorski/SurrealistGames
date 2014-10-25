@@ -8,6 +8,6 @@ namespace SurrealistGames.Models
     public class QuestionSuffix
     {
         public string Content { get; set; }
-        public int Id { get; set; }
+        public int QuestionSuffixId { get; set; }
     }
 }

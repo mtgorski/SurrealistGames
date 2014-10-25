@@ -15,19 +15,19 @@ namespace SurrealistGames.Repositories.Mocks
             new QuestionSuffix()
             {
                 Content = "Falling down 7 times, getting up 8.",
-                Id = 1
+                QuestionSuffixId = 1
             },
 
             new QuestionSuffix()
             {
                 Content = "Forgotten dreams.",
-                Id = 2
+                QuestionSuffixId = 2
             },
 
             new QuestionSuffix()
             {
                 Content = "Eternal suffering.",
-                Id = 3
+                QuestionSuffixId = 3
             }
         };
 
@@ -52,11 +52,11 @@ namespace SurrealistGames.Repositories.Mocks
         {
             if (_suffixes.Any())
             {
-                suffix.Id = _suffixes.Max(x => x.Id);
+                suffix.QuestionSuffixId = _suffixes.Max(x => x.QuestionSuffixId);
             }
             else
             {
-                suffix.Id = 1;
+                suffix.QuestionSuffixId = 1;
             }
 
             _suffixes.Add(suffix);

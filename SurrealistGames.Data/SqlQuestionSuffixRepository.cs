@@ -62,7 +62,7 @@ namespace SurrealistGames.Repositories
                         if (dr.Read())
                         {
                             questionSuffix.Content = dr["QuestionSuffixContent"].ToString();
-                            questionSuffix.Id = (int)dr["QuestionSuffixId"];
+                            questionSuffix.QuestionSuffixId = (int)dr["QuestionSuffixId"];
                             randomQuestionResultIsNull = false;
                         }
                         

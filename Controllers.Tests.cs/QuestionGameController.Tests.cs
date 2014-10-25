@@ -75,7 +75,7 @@ namespace Controllers.Tests.cs
         {
             var mock = new Mock<IQuestionPrefixRepository>();
             mock.Setup(m => m.GetRandom()).Returns(() => 
-                new QuestionPrefix() {Content = "What is life?", Id = 2});
+                new QuestionPrefix() {Content = "What is life?", QuestionPrefixId = 2});
             return mock;
         }
 
@@ -83,7 +83,7 @@ namespace Controllers.Tests.cs
         {
             var mock = new Mock<IQuestionSuffixRepository>();
             mock.Setup(m => m.GetRandom()).Returns(() =>
-                new QuestionSuffix() { Content = "Falling down 7 times, getting up 8.", Id = 2 });
+                new QuestionSuffix() { Content = "Falling down 7 times, getting up 8.", QuestionSuffixId = 2 });
             return mock;
         }
 

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model SurrealistGames.Models.SavedQuestionGameResult
+@{
     ViewBag.Title = "Question and Answer";
 }
 
@@ -12,9 +13,15 @@
 
     <div class="row">
         <div class="col-xs-8 col-sm-offset-1 well">
+            @Html.HiddenFor(m => m.QuestionPrefixId)
+            @Html.HiddenFor(m => m.QuestionSuffixId)
             <p class="lead">Q : <span id="question"></span></p>
             <p class="lead">A : <span id="answer"></span></p>
             <button class="btn btn-primary" onclick="return onRefreshClick()">Refresh</button>
+            <button id="saveButton" class="btn btn-primary" onclick="return onSaveClick()">Save</button>
+        </div>
+        <div class="col-xs-1">
+           
         </div>
     </div>
 </div>
@@ -22,6 +29,12 @@
 @section scripts
 {
     <script>
+
+        $(document).ready(function () {
+                onRefreshClick();
+            }
+        );
+
         function onRefreshClick() {
             $.ajax(
             {
@@ -31,6 +44,30 @@
                 success: function (data, textStatus, jqXHR) {
                     $('#question').html(data.QuestionPrefix.Content);
                     $('#answer').html(data.QuestionSuffix.Content);
+                    $('input[name="QuestionPrefixId"]').val(data.QuestionPrefix.QuestionPrefixId);
+                    $('input[name="QuestionSuffixId"]').val(data.QuestionSuffix.QuestionSuffixId);
+                    $("#saveButton").prop('disabled', false).html("Save");
+                }
+            });
+        }
+
+        function onSaveClick() {
+            var postData = {};
+            postData.questionPrefixId = $('input[name="QuestionPrefixId"]').val();
+            postData.questionSuffixId = $('input[name="QuestionSuffixId"]').val();
+
+            $.ajax(
+            {
+                url: '/SavedQuestionGameResult/Post',
+                method: 'POST',
+                data: postData,
+                success: function(data, textStatus, jqXHR) {
+                    if (! Boolean(data.LoggedIn)) {
+                        alert("Please log in to use this feature.");
+                    }
+
+                    $("#saveButton").prop('disabled', true).html("Saved");
+                    
                 }
             });
         }

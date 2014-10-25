@@ -8,8 +8,7 @@ namespace SurrealistGames.Repositories
 {
     public static class Settings
     {
-        private static string _connectionString =
-            @"Data Source=(localdb)\v11.0;Initial Catalog=SurrealistGamesDev;Integrated Security=True";
+        private static string _connectionString;
 
         public static string GetConnectionString()
         {

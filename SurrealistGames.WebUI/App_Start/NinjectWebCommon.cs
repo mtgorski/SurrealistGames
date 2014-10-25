@@ -82,6 +82,7 @@ namespace SurrealistGames.WebUI.App_Start
             kernel.Bind<IQuestionSuffixFormatter>().To<AnswerFormatter>();
             kernel.Bind<IUserInfoRepo>().To<SqlUserInfoRepository>();
             kernel.Bind<IUserUtility>().To<UserUtility>();
+            kernel.Bind<ISavedQuestionGameResultRepo>().To<SqlSavedQuestionGameResultRepo>();
 
         }        
     }

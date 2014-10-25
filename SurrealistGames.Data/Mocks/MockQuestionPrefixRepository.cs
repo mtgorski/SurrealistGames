@@ -14,19 +14,19 @@ namespace SurrealistGames.Data.Mocks
             new QuestionPrefix()
             {
                 Content = "What is the essence of life?",
-                Id = 1
+                QuestionPrefixId = 1
             },
 
             new QuestionPrefix()
             {
                 Content = "What is ugliness?",
-                Id = 2
+                QuestionPrefixId = 2
             },
 
             new QuestionPrefix()
             {
                 Content = "What is the difference between right and wrong?",
-                Id = 3
+                QuestionPrefixId = 3
             }
         };
 
@@ -51,11 +51,11 @@ namespace SurrealistGames.Data.Mocks
         {
             if (_prefixes.Any())
             {
-                prefix.Id = _prefixes.Max(x => x.Id);
+                prefix.QuestionPrefixId = _prefixes.Max(x => x.QuestionPrefixId);
             }
             else
             {
-                prefix.Id = 1;
+                prefix.QuestionPrefixId = 1;
             }
             _prefixes.Add(prefix);
         }

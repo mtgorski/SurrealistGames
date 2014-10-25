@@ -45,6 +45,7 @@ namespace SurrealistGames.Data
                 };
 
                 cmd.Parameters.AddWithValue("@AspId", aspNetId);
+                cn.Open();
 
                 using (var dr = cmd.ExecuteReader())
                 {
