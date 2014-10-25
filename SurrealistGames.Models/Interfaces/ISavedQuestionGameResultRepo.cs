@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace SurrealistGames.Models.Interfaces
 {
-    public interface IUserInfoRepo
+    public interface ISavedQuestionGameResultRepo
     {
-        void Add(UserInfo item);
-        UserInfo GetByAspId(string aspNetId);
+        void Save(SavedQuestionGameResult item);
     }
 }

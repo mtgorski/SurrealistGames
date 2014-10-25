@@ -16,5 +16,11 @@ namespace SurrealistGames.Data.Mocks
         {
             _allItems.Add(item);
         }
+
+
+        public UserInfo GetByAspId(string aspNetId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

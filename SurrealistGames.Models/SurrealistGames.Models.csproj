@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Interfaces\IQuestionPrefixRepository.cs" />
     <Compile Include="Interfaces\IQuestionSuffixRepository.cs" />
+    <Compile Include="Interfaces\ISavedQuestionGameResultRepo.cs" />
     <Compile Include="Interfaces\IUserInfoRepo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionGameOutcome.cs" />

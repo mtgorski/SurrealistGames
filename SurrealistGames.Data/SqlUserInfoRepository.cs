@@ -28,5 +28,11 @@ namespace SurrealistGames.Data
                 cmd.ExecuteNonQuery();
             }
         }
+
+
+        public Models.UserInfo GetByAspId(string aspNetId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
