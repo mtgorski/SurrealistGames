@@ -1,8 +1,14 @@
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using SurrealistGames.Data;
 using SurrealistGames.Data.Mocks;
 using SurrealistGames.GameLogic;
 using SurrealistGames.Models.Interfaces;
 using SurrealistGames.Repositories;
 using SurrealistGames.Utility;
+using SurrealistGames.WebUI.Interfaces;
+using SurrealistGames.WebUI.Models;
+using SurrealistGames.WebUI.Utility;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(SurrealistGames.WebUI.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(SurrealistGames.WebUI.App_Start.NinjectWebCommon), "Stop")]
@@ -74,8 +80,9 @@ namespace SurrealistGames.WebUI.App_Start
             kernel.Bind<IQuestionPrefixFormatter>().To<QuestionFormatter>();
             kernel.Bind<IQuestionSuffixValidator>().To<AnswerValidator>();
             kernel.Bind<IQuestionSuffixFormatter>().To<AnswerFormatter>();
+            kernel.Bind<IUserInfoRepo>().To<SqlUserInfoRepository>();
+            kernel.Bind<IUserUtility>().To<UserUtility>();
 
-            kernel.Bind<IUserInfoRepo>().To<MockUserInfoRepo>();
         }        
     }
 }

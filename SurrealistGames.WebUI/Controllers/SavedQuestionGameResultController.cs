@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using SurrealistGames.Models;
 using SurrealistGames.Models.Interfaces;
+using SurrealistGames.WebUI.Interfaces;
 using SurrealistGames.WebUI.Models;
 
 namespace SurrealistGames.WebUI.Controllers
@@ -18,28 +19,28 @@ namespace SurrealistGames.WebUI.Controllers
     {
         private IUserInfoRepo _userInfoRepo;
         private ISavedQuestionGameResultRepo _savedQuestionGameResultRepo;
-        private IUser _aspUser;
+        private IUserUtility _userUtility;
 
 
-        public SavedQuestionGameResultController(IUserInfoRepo userInfoRepo, ISavedQuestionGameResultRepo savedQuestionGameResultRepo, Microsoft.AspNet.Identity.IUser user)
+        public SavedQuestionGameResultController(IUserInfoRepo userInfoRepo, ISavedQuestionGameResultRepo savedQuestionGameResultRepo, IUserUtility userUtility)
         {
             _userInfoRepo = userInfoRepo;
             _savedQuestionGameResultRepo = savedQuestionGameResultRepo;
-            _aspUser = user;
+            _userUtility = userUtility;
             
         }
 
         public JsonResult Post(int questionPrefixId, int questionSuffixId)
         {
             var result = new SaveQuestionGamePostResult();
-
-            if (_aspUser != null)
+            
+            if (_userUtility.IsLoggedIn(this))
             {
                 var itemToSave = new SavedQuestionGameResult()
                 {
                     QuestionPrefixId = questionPrefixId,
                     QuestionSuffixId = questionSuffixId,
-                    UserInfoId = _userInfoRepo.GetByAspId(_aspUser.Id).UserInfoId
+                    UserInfoId = _userInfoRepo.GetByAspId(_userUtility.GetAspId(this)).UserInfoId
                 };
                 _savedQuestionGameResultRepo.Save(itemToSave);
 

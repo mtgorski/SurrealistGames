@@ -11,6 +11,7 @@ using NUnit.Framework;
 using SurrealistGames.Models;
 using SurrealistGames.Models.Interfaces;
 using SurrealistGames.WebUI.Controllers;
+using SurrealistGames.WebUI.Interfaces;
 using SurrealistGames.WebUI.Models;
 
 namespace Controllers.Tests.cs
@@ -26,13 +27,15 @@ namespace Controllers.Tests.cs
             
             var mockSavedQuestionRepo = new Mock<ISavedQuestionGameResultRepo>();
 
-            var mockUser = new Mock<IUser>();
-            mockUser.Setup(m => m.Id).Returns("5");
+            var mockUserUtility = new Mock<IUserUtility>();
+            mockUserUtility.Setup(m => m.IsLoggedIn(It.IsAny<Controller>())).Returns(true);
+            mockUserUtility.Setup(m => m.GetAspId(It.IsAny<Controller>())).Returns("5");
 
             var mockUserRepo = new Mock<IUserInfoRepo>();
             mockUserRepo.Setup(m => m.GetByAspId(It.Is<string>(x => x == "5"))).Returns(new UserInfo() {UserInfoId = 5}); 
             var controller = new SavedQuestionGameResultController(mockUserRepo.Object, mockSavedQuestionRepo.Object,
-                mockUser.Object);
+                                                                    mockUserUtility.Object);
+                
 
             //act
             controller.Post(4, 3);
@@ -49,13 +52,14 @@ namespace Controllers.Tests.cs
         {
             var mockSavedQuestionRepo = new Mock<ISavedQuestionGameResultRepo>();
 
-            var mockUser = new Mock<IUser>();
-            mockUser.Setup(m => m.Id).Returns("5");
+            var mockUserUtility = new Mock<IUserUtility>();
+            mockUserUtility.Setup(m => m.IsLoggedIn(It.IsAny<Controller>())).Returns(true);
+            mockUserUtility.Setup(m => m.GetAspId(It.IsAny<Controller>())).Returns("5");
 
             var mockUserRepo = new Mock<IUserInfoRepo>();
             mockUserRepo.Setup(m => m.GetByAspId(It.Is<string>(x => x == "5"))).Returns(new UserInfo() { UserInfoId = 5 });
             var controller = new SavedQuestionGameResultController(mockUserRepo.Object, mockSavedQuestionRepo.Object,
-                mockUser.Object);
+                mockUserUtility.Object);
 
             //act
             var result = controller.Post(4, 3).Data as SaveQuestionGamePostResult;
