@@ -46,13 +46,13 @@ namespace SurrealistGames.WebUI.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return View(new SavedQuestionGameResult());
         }
 
         // GET: QuestionGame
         public ActionResult Play()
         {
-            return View();
+            return View(new SavedQuestionGameResult());
         }
 
         [HttpPost]

@@ -37,12 +37,16 @@ begin transaction
 	insert into QuestionPrefix(QuestionPrefixContent)
 	values (@QuestionPrefixContent);
 
+	declare @NewId int
+	set @NewId = SCOPE_IDENTITY()
+
 	insert into RandomQuestionPrefix(QuestionPrefixID, RandomQuestionPrefixID)
-	values (SCOPE_IDENTITY(), (select Max(RandomQuestionPrefixID) + 1 
+	values (@NewId, (select Max(RandomQuestionPrefixID) + 1 
 								from RandomQuestionPrefix ));
 commit transaction
-go
 
+	select @NewId as QuestionPrefixId
+go
 
 create procedure QuestionSuffix_Insert
 (
@@ -52,11 +56,17 @@ begin transaction
 	insert into QuestionSuffix(QuestionSuffixContent)
 	values (@QuestionSuffixContent);
 
+	declare @NewId int
+	set @NewId = SCOPE_IDENTITY()
+
 	insert into RandomQuestionSuffix(QuestionSuffixID, RandomQuestionSuffixID)
-	values(SCOPE_IDENTITY(), (select Max(RandomQuestionSuffixID) + 1
+	values(@NewId, (select Max(RandomQuestionSuffixID) + 1
 								from RandomQuestionSuffix ));
 commit transaction
+
+	select @NewId as QuestionSuffixId
 go
+
 
 create procedure UserInfo_Insert
 (
@@ -107,6 +117,7 @@ as
 	from UserInfo ui
 	inner join SavedQuestionGameResult sqgr on ui.UserInfoId = sqgr.UserInfoId
 	inner join QuestionPrefix qp on sqgr.QuestionPrefixId = qp.QuestionPrefixID
-	inner join QuestionSuffix qs on sqgr.QuestionPrefixId = qs.QuestionSuffixID
+	inner join QuestionSuffix qs on sqgr.QuestionSuffixId = qs.QuestionSuffixID
 	where ui.UserInfoId = @UserInfoId
 go
+

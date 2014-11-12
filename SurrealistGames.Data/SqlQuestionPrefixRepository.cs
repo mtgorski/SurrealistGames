@@ -81,7 +81,13 @@ namespace SurrealistGames.Repositories
 
                 cn.Open();
 
-                cmd.ExecuteNonQuery();
+                using (var dr = cmd.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        prefix.QuestionPrefixId = (int) dr["QuestionPrefixId"];
+                    }
+                }
             }
         }
     }

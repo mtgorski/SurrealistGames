@@ -3,6 +3,8 @@
 }, "Your input does not match the expected format.");
 
 $(document).ready(function () {
+    $('#saveButton').prop('disabled', true);
+
     $('#prefixForm').validate({
         rules: {
             prefix: {
@@ -62,6 +64,9 @@ function onSubmitResponseHandler(data, textStatus, jqXHR) {
         $("#answer").html(data.GameOutcome.QuestionSuffix.Content);
         $("#prefix").val("");
         $("#suffix").val("");
+        $('input[name="QuestionPrefixId"]').val(data.GameOutcome.QuestionPrefix.QuestionPrefixId);
+        $('input[name="QuestionSuffixId"]').val(data.GameOutcome.QuestionSuffix.QuestionSuffixId);
+        $('#saveButton').prop('disabled', false).html('Save');
     } else {
         //clear previous question and answer results
         $("#question").html("");
@@ -75,4 +80,25 @@ function onSubmitResponseHandler(data, textStatus, jqXHR) {
 
         $("#question").append($errorList);
     }
+}
+
+function onSaveClick() {
+    var postData = {};
+    postData.questionPrefixId = $('input[name="QuestionPrefixId"]').val();
+    postData.questionSuffixId = $('input[name="QuestionSuffixId"]').val();
+
+    $.ajax(
+    {
+        url: '/SavedQuestionGameResult/Post',
+        method: 'POST',
+        data: postData,
+        success: function (data, textStatus, jqXHR) {
+            if (!Boolean(data.LoggedIn)) {
+                alert("Please log in to use this feature.");
+            }
+
+            $("#saveButton").prop('disabled', true).html("Saved");
+
+        }
+    });
 }
