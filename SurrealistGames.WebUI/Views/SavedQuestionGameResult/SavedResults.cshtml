@@ -1,5 +1,6 @@
-﻿@using SurrealistGames.Models
-@model List<SurrealistGames.Models.UserSavedOutcomeView>
+﻿@using PagedList.Mvc
+@using SurrealistGames.Models
+@model PagedList.PagedList<SurrealistGames.Models.UserSavedOutcomeView>
 @{
     ViewBag.Title = "Favorites";
 }
@@ -23,4 +24,10 @@
             </div>
         </div>
     }
+    
+    <div class="row">
+        <div class="col-xs-4">
+            @Html.PagedListPager(Model, page=> Url.Action("SavedResults", new {page, pageSize=Model.PageSize}))
+        </div>
+    </div>
 </div>

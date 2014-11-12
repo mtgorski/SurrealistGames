@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using PagedList;
 using SurrealistGames.Models;
 using SurrealistGames.Models.Interfaces;
 using SurrealistGames.WebUI.Interfaces;
@@ -53,12 +54,14 @@ namespace SurrealistGames.WebUI.Controllers
         }
 
         [Authorize]
-        public ViewResult SavedResults()
+        public ViewResult SavedResults(int page = 1, int pageSize = 5)
         {
             
             var userInfoId = _userInfoRepo.GetByAspId(_userUtility.GetAspId(this)).UserInfoId;
 
-            var model = _savedQuestionGameResultRepo.GetAllSavedOutcomesByUserId(userInfoId);
+            var favorites = _savedQuestionGameResultRepo.GetAllSavedOutcomesByUserId(userInfoId);
+
+            var model = new PagedList<UserSavedOutcomeView>(favorites, page, pageSize);
 
             return View("SavedResults", model);
         }

@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Moq;
 using NUnit.Framework;
+using PagedList;
 using SurrealistGames.Models;
 using SurrealistGames.Models.Interfaces;
 using SurrealistGames.WebUI.Controllers;
@@ -80,6 +81,8 @@ namespace Controllers.Tests.cs
         public void SavedResults_CallsGetAllByUserIdOnGameStorageRepo()
         {
             SetUpLoggedInUser("test", 3);
+            FakeSavedOutcomeRepo.Setup(m => m.GetAllSavedOutcomesByUserId(It.IsAny<int>()))
+                .Returns(new List<UserSavedOutcomeView>());
             ControllerUnderTest.SavedResults();
 
             FakeSavedOutcomeRepo
@@ -90,6 +93,8 @@ namespace Controllers.Tests.cs
         public void SavedResults_RendersSavedResultsView()
         {
             SetUpLoggedInUser("test", 5);
+            FakeSavedOutcomeRepo.Setup(m => m.GetAllSavedOutcomesByUserId(It.IsAny<int>()))
+                .Returns(new List<UserSavedOutcomeView>());
 
             var result = ControllerUnderTest.SavedResults();
 
@@ -97,7 +102,7 @@ namespace Controllers.Tests.cs
         }
 
         [Test]
-        public void SavedResults_PassesListOfOutcomesToView()
+        public void SavedResults_PassesPagedListOfOutcomesToView()
         {
             SetUpLoggedInUser("test", 5);
             var model = new List<UserSavedOutcomeView>();
@@ -105,7 +110,8 @@ namespace Controllers.Tests.cs
 
             var result = ControllerUnderTest.SavedResults();
 
-            Assert.AreEqual(model, result.Model);
+            var viewModel = result.Model as PagedList<UserSavedOutcomeView>;
+            Assert.IsNotNull(viewModel);
         }
 
        
