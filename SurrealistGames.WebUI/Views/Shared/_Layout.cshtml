@@ -21,11 +21,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Play", "Play", "QuestionGame")</li>
-                    <li>@Html.ActionLink("View", "Index", "QuestionGame")</li>
+                    <li>@Html.RouteLink("Play", "play")</li>
+                    <li>@Html.RouteLink("View", "view")</li>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("My Favorites", "SavedResults", "SavedQuestionGameResult")</li>
+                        <li>@Html.RouteLink("My Favorites", "Favorites")</li>
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")

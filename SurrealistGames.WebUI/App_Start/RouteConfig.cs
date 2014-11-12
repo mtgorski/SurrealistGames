@@ -14,6 +14,22 @@ namespace SurrealistGames.WebUI
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "Favorites",
+                url: "favorites",
+                defaults: new { controller = "SavedQuestionGameResult", action = "SavedResults" }
+                );
+
+            routes.MapRoute(
+                name: "Play",
+                url: "play",
+                defaults: new {controller = "QuestionGame", action = "Play"});
+
+            routes.MapRoute(
+                name: "View",
+                url: "view",
+                defaults: new {controller = "QuestionGame", action = "Index"});
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
