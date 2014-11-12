@@ -14,14 +14,17 @@
 
     @foreach (var outcome in Model)
     {
-        <div class="row">
-            <div class="col-xs-8 col-sm-offset-1 well">
-                <p class="lead">Q : <span id="question">@outcome.Question</span></p>
-                <p class="lead">A : <span id="answer">@outcome.Answer</span></p>
+        <div id="outcome-@outcome.SavedQuestionId" class="row">
+            <div class="well col-xs-6 col-sm-offset-1">
+                <div class="col-xs-8 col-sm-offset-1">
+                    <p class="lead">Q : <span id="question">@outcome.Question</span></p>
+                    <p class="lead">A : <span id="answer">@outcome.Answer</span></p>
+                </div>
+                <div class="col-xs-1">
+                    <button class="btn btn-primary" onclick="deleteFavorite(@outcome.SavedQuestionId)">Delete</button>
+                </div> 
             </div>
-            <div class="col-xs-1">                
-                <button class="btn btn-primary" onclick="deleteFavorite(@outcome.SavedQuestionId)">Delete</button>
-            </div>
+           
         </div>
     }
     
@@ -34,6 +37,11 @@
 
 @section scripts {
     <script>
-        
+        function deleteFavorite(savedQuestionId) {
+            $.post("/SavedQuestionGameResult/Delete", { savedQuestionId: savedQuestionId })
+                .success(function(result) {
+                $('#outcome-' + savedQuestionId).remove();
+            });
+        }
     </script>
 }
