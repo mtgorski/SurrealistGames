@@ -16,7 +16,7 @@ $(document).ready(function () {
         onfocusout: false,
         submitHandler: function (form) {
             $.ajax({
-                url: "SubmitQuestionAction",
+                url: "/QuestionGame/SubmitQuestionAction",
                 method: "POST",
                 data: { questionContent: $("#prefix").val() },
                 success: onSubmitResponseHandler
@@ -42,7 +42,7 @@ $(document).ready(function () {
         onfocusout: false,
         submitHandler: function (form) {
             $.ajax({
-                url: "SubmitAnswerAction",
+                url: "/QuestionGame/SubmitAnswerAction",
                 method: "POST",
                 data: { answerContent: $("#suffix").val() },
                 success: onSubmitResponseHandler
