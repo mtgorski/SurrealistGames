@@ -18,7 +18,14 @@
             <p class="lead">Q : <span id="question"></span></p>
             <p class="lead">A : <span id="answer"></span></p>
             <button class="btn btn-primary" onclick="return onRefreshClick()">Refresh</button>
-            <button id="saveButton" class="btn btn-primary" onclick="return onSaveClick()">Save</button>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <button id="saveButton" class="btn btn-primary" onclick="return onSaveClick()">Save</button>
+            }
+            else
+            {
+                <button id="saveButton" class="btn btn-primary" disabled="disabled">Log in to save</button>
+            }
         </div>
         <div class="col-xs-1">
 
