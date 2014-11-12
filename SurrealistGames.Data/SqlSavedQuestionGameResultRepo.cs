@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SurrealistGames.Models;
 using SurrealistGames.Models.Interfaces;
 using SurrealistGames.Repositories;
 
@@ -31,6 +32,12 @@ namespace SurrealistGames.Data
 
                 cmd.ExecuteNonQuery();
             }
+        }
+
+
+        public List<UserSavedOutcomeView> GetAllSavedOutcomesByUserId(int userInfoid)
+        {
+            throw new NotImplementedException();
         }
     }
 }

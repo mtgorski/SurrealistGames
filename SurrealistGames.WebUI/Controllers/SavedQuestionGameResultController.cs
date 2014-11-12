@@ -51,5 +51,16 @@ namespace SurrealistGames.WebUI.Controllers
             result.LoggedIn = false;
             return Json(result);
         }
+
+        [Authorize]
+        public ViewResult SavedResults()
+        {
+            
+            var userInfoId = _userInfoRepo.GetByAspId(_userUtility.GetAspId(this)).UserInfoId;
+
+            var model = _savedQuestionGameResultRepo.GetAllSavedOutcomesByUserId(userInfoId);
+
+            return View("SavedResults", model);
+        }
     }
 }

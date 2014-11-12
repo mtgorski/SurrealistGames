@@ -10,7 +10,6 @@ namespace SurrealistGames.Models
     public class QuestionGameOutcome
     {
         public QuestionPrefix QuestionPrefix { get; set; }
-
         public QuestionSuffix QuestionSuffix { get; set; }
     }
 }

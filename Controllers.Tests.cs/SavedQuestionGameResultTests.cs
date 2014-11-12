@@ -19,28 +19,46 @@ namespace Controllers.Tests.cs
     [TestFixture]
     class SavedQuestionGameResultTests
     {
-        
+        public Mock<ISavedQuestionGameResultRepo> FakeSavedOutcomeRepo { get; set; }
+
+        public Mock<IUserUtility> FakeUserUtility { get; set; }
+
+        public Mock<IUserInfoRepo> FakeUserInfoRepo { get; set; }
+
+        public SavedQuestionGameResultController ControllerUnderTest { get; set; }
+
+        [SetUp]
+        public void SetUp()
+        {
+            FakeSavedOutcomeRepo = new Mock<ISavedQuestionGameResultRepo>();
+            FakeUserUtility = new Mock<IUserUtility>();
+            FakeUserInfoRepo = new Mock<IUserInfoRepo>();
+            ControllerUnderTest = new SavedQuestionGameResultController(FakeUserInfoRepo.Object,
+                FakeSavedOutcomeRepo.Object, FakeUserUtility.Object);
+        }
+
+        private void SetUpLoggedInUser(string aspId, int userInfoId)
+        {
+            FakeUserUtility.Setup(m => m.IsLoggedIn(It.IsAny<Controller>())).Returns(true);
+            FakeUserUtility.Setup(m => m.GetAspId(It.IsAny<Controller>())).Returns(aspId);
+
+            FakeUserInfoRepo.Setup(m => m.GetByAspId(It.Is<string>(x => x == aspId)))
+                .Returns(new UserInfo()
+                {
+                    Id = aspId,
+                    UserInfoId = userInfoId
+                });
+        }
 
         [Test]
         public void Post_WithUserLoggedIn_CallsSavedQuestionGameResultRepo()
         {
-            
-            var mockSavedQuestionRepo = new Mock<ISavedQuestionGameResultRepo>();
-
-            var mockUserUtility = new Mock<IUserUtility>();
-            mockUserUtility.Setup(m => m.IsLoggedIn(It.IsAny<Controller>())).Returns(true);
-            mockUserUtility.Setup(m => m.GetAspId(It.IsAny<Controller>())).Returns("5");
-
-            var mockUserRepo = new Mock<IUserInfoRepo>();
-            mockUserRepo.Setup(m => m.GetByAspId(It.Is<string>(x => x == "5"))).Returns(new UserInfo() {UserInfoId = 5}); 
-            var controller = new SavedQuestionGameResultController(mockUserRepo.Object, mockSavedQuestionRepo.Object,
-                                                                    mockUserUtility.Object);
-                
+            SetUpLoggedInUser("5", 5);
 
             //act
-            controller.Post(4, 3);
+            ControllerUnderTest.Post(4, 3);
 
-            mockSavedQuestionRepo.Verify( x => x.
+            FakeSavedOutcomeRepo.Verify( x => x.
                 Save(It.Is<SavedQuestionGameResult>((itemToSave) => itemToSave.QuestionPrefixId == 4 
                                                     && itemToSave.QuestionSuffixId == 3
                                                     && itemToSave.UserInfoId == 5)), Times.Once);
@@ -50,21 +68,46 @@ namespace Controllers.Tests.cs
         [Test]
         public void Post_WithUserLoggedIn_ReturnsSuccess()
         {
-            var mockSavedQuestionRepo = new Mock<ISavedQuestionGameResultRepo>();
-
-            var mockUserUtility = new Mock<IUserUtility>();
-            mockUserUtility.Setup(m => m.IsLoggedIn(It.IsAny<Controller>())).Returns(true);
-            mockUserUtility.Setup(m => m.GetAspId(It.IsAny<Controller>())).Returns("5");
-
-            var mockUserRepo = new Mock<IUserInfoRepo>();
-            mockUserRepo.Setup(m => m.GetByAspId(It.Is<string>(x => x == "5"))).Returns(new UserInfo() { UserInfoId = 5 });
-            var controller = new SavedQuestionGameResultController(mockUserRepo.Object, mockSavedQuestionRepo.Object,
-                mockUserUtility.Object);
+            SetUpLoggedInUser("5", 5);
 
             //act
-            var result = controller.Post(4, 3).Data as SaveQuestionGamePostResult;
+            var result = ControllerUnderTest.Post(4, 3).Data as SaveQuestionGamePostResult;
 
             Assert.AreEqual(result.LoggedIn, true);
         }
+
+        [Test]
+        public void SavedResults_CallsGetAllByUserIdOnGameStorageRepo()
+        {
+            SetUpLoggedInUser("test", 3);
+            ControllerUnderTest.SavedResults();
+
+            FakeSavedOutcomeRepo
+                .Verify(m => m.GetAllSavedOutcomesByUserId( It.Is<int>(x => x == 3)));
+        }
+
+        [Test]
+        public void SavedResults_RendersSavedResultsView()
+        {
+            SetUpLoggedInUser("test", 5);
+
+            var result = ControllerUnderTest.SavedResults();
+
+            Assert.AreEqual(result.ViewName, "SavedResults");
+        }
+
+        [Test]
+        public void SavedResults_PassesListOfOutcomesToView()
+        {
+            SetUpLoggedInUser("test", 5);
+            var model = new List<UserSavedOutcomeView>();
+            FakeSavedOutcomeRepo.Setup(m => m.GetAllSavedOutcomesByUserId(5)).Returns(model);
+
+            var result = ControllerUnderTest.SavedResults();
+
+            Assert.AreEqual(model, result.Model);
+        }
+
+       
     }
 }

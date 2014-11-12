@@ -9,5 +9,6 @@ namespace SurrealistGames.Models.Interfaces
     public interface ISavedQuestionGameResultRepo
     {
         void Save(SavedQuestionGameResult item);
+        List<UserSavedOutcomeView> GetAllSavedOutcomesByUserId(int userInfoid);
     }
 }

@@ -1,0 +1,26 @@
+﻿@using SurrealistGames.Models
+@model List<SurrealistGames.Models.UserSavedOutcomeView>
+@{
+    ViewBag.Title = "Favorites";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6">
+            <h2>Favorites</h2>
+        </div>
+    </div>
+
+    @foreach (var outcome in Model)
+    {
+        <div class="row">
+            <div class="col-xs-8 col-sm-offset-1 well">
+                <p class="lead">Q : <span id="question">@outcome.Question</span></p>
+                <p class="lead">A : <span id="answer">@outcome.Answer</span></p>
+            </div>
+            <div class="col-xs-1">
+
+            </div>
+        </div>
+    }
+</div>

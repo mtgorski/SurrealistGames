@@ -1,8 +1,11 @@
+using System.Collections.Generic;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Moq;
 using SurrealistGames.Data;
 using SurrealistGames.Data.Mocks;
 using SurrealistGames.GameLogic;
+using SurrealistGames.Models;
 using SurrealistGames.Models.Interfaces;
 using SurrealistGames.Repositories;
 using SurrealistGames.Utility;
