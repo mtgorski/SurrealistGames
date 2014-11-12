@@ -97,3 +97,16 @@ create procedure UserInfo_GetByAspId
 as 
  select * from UserInfo where Id = @AspId
 go
+
+create procedure UserInfo_GetSavedQuestions
+(
+	@UserInfoId int
+) 
+as
+	select sqgr.SavedQuestionId as SavedQuestionId, qp.QuestionPrefixContent as Question, qs.QuestionSuffixContent as Answer 
+	from UserInfo ui
+	inner join SavedQuestionGameResult sqgr on ui.UserInfoId = sqgr.UserInfoId
+	inner join QuestionPrefix qp on sqgr.QuestionPrefixId = qp.QuestionPrefixID
+	inner join QuestionSuffix qs on sqgr.QuestionPrefixId = qs.QuestionSuffixID
+	where ui.UserInfoId = @UserInfoId
+go

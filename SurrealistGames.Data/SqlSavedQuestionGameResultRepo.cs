@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper;
 using SurrealistGames.Models;
 using SurrealistGames.Models.Interfaces;
 using SurrealistGames.Repositories;
@@ -37,7 +38,14 @@ namespace SurrealistGames.Data
 
         public List<UserSavedOutcomeView> GetAllSavedOutcomesByUserId(int userInfoid)
         {
-            throw new NotImplementedException();
+            using(var cn = new SqlConnection(Settings.GetConnectionString()))
+            {
+                var p = new DynamicParameters();
+                p.Add("@UserInfoId", userInfoid);
+
+                return cn.Query<UserSavedOutcomeView>("UserInfo_GetSavedQuestions",
+                    p, commandType: CommandType.StoredProcedure).ToList();
+            }
         }
     }
 }
