@@ -121,3 +121,27 @@ as
 	where ui.UserInfoId = @UserInfoId
 go
 
+create function UserOwnsResult(@UserInfoId int, @SavedQuestionId int)
+RETURNS bit
+as
+begin
+	declare @UserOwnsResult bit
+	set @UserOwnsResult = 0
+	if exists(select * from SavedQuestionGameResult
+				where SavedQuestionId = @SavedQuestionId and UserInfoId = @UserInfoId)
+	begin
+		set @UserOwnsResult = 1
+	end
+
+	return(@UserOwnsResult)
+end
+go
+
+create procedure SavedQuestionGameResult_Delete
+(
+	@SavedQuestionId int
+)
+as
+	delete from SavedQuestionGameResult
+		where SavedQuestionId = @SavedQuestionId
+go
