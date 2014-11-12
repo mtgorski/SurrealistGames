@@ -51,12 +51,30 @@ namespace SurrealistGames.Data
 
         public bool UserOwnsSavedResult(int userInfoId, int savedQuestionId)
         {
-            throw new NotImplementedException();
+            using (var cn = new SqlConnection(Settings.GetConnectionString()))
+            {
+                return cn.ExecuteScalar<bool>("select dbo.UserOwnsResult(@UserInfoId, @SavedQuestionId)",
+                           new { @UserInfoId = userInfoId, @SavedQuestionId = savedQuestionId} );    
+            }
         }
 
         public void Delete(int savedQuestionId)
         {
-            throw new NotImplementedException();
+            using (var cn = new SqlConnection(Settings.GetConnectionString()))
+            {
+                var cmd = new SqlCommand()
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "SavedQuestionGameResult_Delete",
+                    Connection = cn
+                };
+
+                cmd.Parameters.AddWithValue("@SavedQuestionId", savedQuestionId);
+
+                cn.Open();
+
+                cmd.ExecuteNonQuery();
+            }
         }
     }
 }
