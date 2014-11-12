@@ -57,13 +57,39 @@ namespace SurrealistGames.WebUI.Controllers
         public ViewResult SavedResults(int page = 1, int pageSize = 5)
         {
             
-            var userInfoId = _userInfoRepo.GetByAspId(_userUtility.GetAspId(this)).UserInfoId;
+            var userInfoId = GetUserInfoId();
 
             var favorites = _savedQuestionGameResultRepo.GetAllSavedOutcomesByUserId(userInfoId);
 
             var model = new PagedList<UserSavedOutcomeView>(favorites, page, pageSize);
 
             return View("SavedResults", model);
+        }
+
+        private int GetUserInfoId()
+        {
+            return _userInfoRepo.GetByAspId(_userUtility.GetAspId(this)).UserInfoId;
+        }
+
+        [Authorize]
+        public JsonResult Delete(int savedQuestionId)
+        {
+            var resultModel = new DeleteFavoriteResult()
+            {
+                IsResultOwnedByUser = false,
+                IsUserLoggedIn = true
+            };
+
+            var userInfoId = GetUserInfoId();
+
+            if (_savedQuestionGameResultRepo.UserOwnsSavedResult(userInfoId, savedQuestionId))
+            {
+                resultModel.IsResultOwnedByUser = true;
+
+                _savedQuestionGameResultRepo.Delete(savedQuestionId);
+            }
+
+            return Json(resultModel);
         }
     }
 }

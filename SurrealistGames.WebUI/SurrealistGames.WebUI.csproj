@@ -199,6 +199,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\DeleteFavoriteResult.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\SaveQuestionGamePostResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

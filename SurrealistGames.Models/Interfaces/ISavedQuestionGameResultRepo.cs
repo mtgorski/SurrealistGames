@@ -10,5 +10,8 @@ namespace SurrealistGames.Models.Interfaces
     {
         void Save(SavedQuestionGameResult item);
         List<UserSavedOutcomeView> GetAllSavedOutcomesByUserId(int userInfoid);
+        bool UserOwnsSavedResult(int userInfoId, int savedQuestionId);
+
+        void Delete(int savedQuestionId);
     }
 }

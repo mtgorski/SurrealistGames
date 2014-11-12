@@ -47,5 +47,16 @@ namespace SurrealistGames.Data
                     p, commandType: CommandType.StoredProcedure).ToList();
             }
         }
+
+
+        public bool UserOwnsSavedResult(int userInfoId, int savedQuestionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(int savedQuestionId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

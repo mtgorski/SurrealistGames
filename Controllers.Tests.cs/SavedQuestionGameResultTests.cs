@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using SurrealistGames.Models.Interfaces;
 using SurrealistGames.WebUI.Controllers;
 using SurrealistGames.WebUI.Interfaces;
 using SurrealistGames.WebUI.Models;
+using System.Reflection;
 
 namespace Controllers.Tests.cs
 {
@@ -114,6 +116,75 @@ namespace Controllers.Tests.cs
             Assert.IsNotNull(viewModel);
         }
 
-       
+        [Test]
+        public void Delete_ReturnsJsonResultWithDataCastableToDeleteFavoriteResult()
+        {
+            SetUpLoggedInUser("test", 5);
+            var result = ControllerUnderTest.Delete(3);
+
+            Assert.IsInstanceOf<DeleteFavoriteResult>(result.Data);
+        }
+
+        [Test]
+        public void Delete_OnResultOwnedByUser_CallsSavedResultRepoDelete()
+        {
+            SetUpLoggedInUser("test", 5);
+            FakeSavedOutcomeRepo.Setup(m => m.UserOwnsSavedResult(It.Is<int>(y => y == 5), It.Is<int>(y => y == 10)))
+                .Returns(true);
+
+            ControllerUnderTest.Delete(10);
+
+            FakeSavedOutcomeRepo.Verify(m => m.Delete(It.Is<int>(x => x == 10)));
+        }
+
+        [Test]
+        public void Delete_OnResultOwnedByUser_ReturnsResponseWithUserOwnedTrue()
+        {
+            SetUpLoggedInUser("test", 5);
+            FakeSavedOutcomeRepo.Setup(m => m.UserOwnsSavedResult(It.Is<int>(y => y == 5), It.Is<int>(y => y == 10)))
+                .Returns(true);
+
+            var result = ControllerUnderTest.Delete(10);
+            var resultModel = result.Data as DeleteFavoriteResult;
+
+            Assert.IsTrue(resultModel.IsResultOwnedByUser);
+        }
+
+        [Test]
+        public void Delete_OnResultNotOwnedByUser_DoesNotCallSavedResultRepoDelte()
+        {
+            SetUpLoggedInUser("test", 5);
+            FakeSavedOutcomeRepo.Setup(m => m.UserOwnsSavedResult(It.Is<int>(i => i == 5), It.Is<int>(i => i == 10)))
+                .Returns(false);
+
+            var result = ControllerUnderTest.Delete(10);
+
+            FakeSavedOutcomeRepo.Verify(m => m.Delete(10), Times.Never);
+        }
+
+        [Test]
+        public void Delete_OnResultNotOwnedByUser_ReturnsJsonResultWithOwnedFalse()
+        {
+            SetUpLoggedInUser("test", 5);
+            FakeSavedOutcomeRepo.Setup(m => m.UserOwnsSavedResult(It.Is<int>(i => i == 5), It.Is<int>(i => i == 10)))
+                .Returns(false);
+
+            var result = ControllerUnderTest.Delete(10);
+            var resultModel = result.Data as DeleteFavoriteResult;
+
+            Assert.IsFalse(resultModel.IsResultOwnedByUser);
+        }
+
+        [Test]
+        public void Delete_HasAuthorizeAttribute()
+        {
+            Func<int, JsonResult> deleteFunc = ControllerUnderTest.Delete;
+
+            var authorizeAttributes = deleteFunc.Method.GetCustomAttributes(typeof(AuthorizeAttribute), false);
+            
+            Assert.Greater(authorizeAttributes.Length, 0);
+        }
+
+
     }
 }

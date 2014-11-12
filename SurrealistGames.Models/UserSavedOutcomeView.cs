@@ -8,7 +8,7 @@ namespace SurrealistGames.Models
 {
     public class UserSavedOutcomeView
     {
-        public int SavedQuestId { get; set; }
+        public int SavedQuestionId { get; set; }
         public string Question { get; set; }
         public string Answer { get; set; }
     }
