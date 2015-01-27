@@ -3,7 +3,6 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Moq;
 using SurrealistGames.Data;
-using SurrealistGames.Data.Mocks;
 using SurrealistGames.GameLogic;
 using SurrealistGames.Models;
 using SurrealistGames.Models.Interfaces;
@@ -77,15 +76,15 @@ namespace SurrealistGames.WebUI.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<IRandomBehavior>().To<RandomBehavior>();
-            kernel.Bind<IQuestionPrefixRepository>().To<SqlQuestionPrefixRepository>();
-            kernel.Bind<IQuestionSuffixRepository>().To<SqlQuestionSuffixRepository>();
+            kernel.Bind<IQuestionPrefixRepository>().To<EfQuestionPrefixRepository>();
+            kernel.Bind<IQuestionSuffixRepository>().To<EfQuestionSuffixRepository>();
             kernel.Bind<IQuestionPrefixValidator>().To<QuestionValidator>();
             kernel.Bind<IQuestionPrefixFormatter>().To<QuestionFormatter>();
             kernel.Bind<IQuestionSuffixValidator>().To<AnswerValidator>();
             kernel.Bind<IQuestionSuffixFormatter>().To<AnswerFormatter>();
-            kernel.Bind<IUserInfoRepo>().To<SqlUserInfoRepository>();
+            kernel.Bind<IUserInfoRepo>().To<EfUserInfoRepository>();
             kernel.Bind<IUserUtility>().To<UserUtility>();
-            kernel.Bind<ISavedQuestionGameResultRepo>().To<SqlSavedQuestionGameResultRepo>();
+            kernel.Bind<ISavedQuestionGameResultRepo>().To<EfSavedQuestionGameResultRepository>();
 
         }        
     }

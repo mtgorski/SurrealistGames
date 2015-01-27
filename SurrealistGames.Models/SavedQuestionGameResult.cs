@@ -12,5 +12,10 @@ namespace SurrealistGames.Models
         public int QuestionPrefixId { get; set; }
         public int QuestionSuffixId { get; set; }
         public int UserInfoId { get; set; }
+
+        
+        public virtual QuestionPrefix QuestionPrefix { get; set; }
+        public virtual QuestionSuffix QuestionSuffix { get; set; }
+
     }
 }

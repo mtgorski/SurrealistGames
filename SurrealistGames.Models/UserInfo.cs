@@ -13,5 +13,7 @@ namespace SurrealistGames.Models
         /// AspNetUsers Id
         /// </summary>
         public string Id { get; set; }
+
+        public virtual ICollection<UserSavedOutcomeView> SavedGames { get; set; }
     }
 }

@@ -31,19 +31,6 @@ namespace SurrealistGames.WebUI.Controllers
 
         }
 
-        //public QuestionGameController()
-        //{
-        //    var rng = new RandomBehavior();
-        //    //_prefixRepo = new MockQuestionPrefixRepository(rng);
-        //    _prefixRepo = new SqlQuestionPrefixRepository();
-        //    _suffixRepo = new SqlQuestionSuffixRepository();
-        //    _questionValidator = new QuestionValidator();
-        //    _questionFormatter = new QuestionFormatter();
-        //    _answerValidator = new AnswerValidator();
-        //    _answerFormatter = new AnswerFormatter();
-        //    _generator = new QuestionGameOutcomeGenerator(_prefixRepo, _suffixRepo);
-        //}
-
         public ActionResult Index()
         {
             return View(new SavedQuestionGameResult());
@@ -71,7 +58,7 @@ namespace SurrealistGames.WebUI.Controllers
             if (!result.ErrorMessages.Any())
             {
                 var formattedQuestion = _questionFormatter.Format(questionContent);
-                var prefix = new QuestionPrefix() { Content = formattedQuestion };
+                var prefix = new QuestionPrefix() { QuestionPrefixContent = formattedQuestion };
                 result.GameOutcome = _generator.GetOutcome(prefix);
                 result.Success = true;
                 _prefixRepo.Save(prefix);
@@ -96,7 +83,7 @@ namespace SurrealistGames.WebUI.Controllers
             if (!result.ErrorMessages.Any())
             {
                 var formattedAnswer = _answerFormatter.Format(answerContent);
-                var suffix = new QuestionSuffix() { Content = formattedAnswer };
+                var suffix = new QuestionSuffix() { QuestionSuffixContent = formattedAnswer };
                 result.GameOutcome = _generator.GetOutcome(suffix);
                 result.Success = true;
                 _suffixRepo.Save(suffix);

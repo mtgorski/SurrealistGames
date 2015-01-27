@@ -53,8 +53,8 @@
                 method: 'GET',
                 cache: false,
                 success: function (data, textStatus, jqXHR) {
-                    $('#question').html(data.QuestionPrefix.Content);
-                    $('#answer').html(data.QuestionSuffix.Content);
+                    $('#question').html(data.QuestionPrefix.QuestionPrefixContent);
+                    $('#answer').html(data.QuestionSuffix.QuestionSuffixContent);
                     $('input[name="QuestionPrefixId"]').val(data.QuestionPrefix.QuestionPrefixId);
                     $('input[name="QuestionSuffixId"]').val(data.QuestionSuffix.QuestionSuffixId);
                     $("#saveButton").prop('disabled', false).html("Save");

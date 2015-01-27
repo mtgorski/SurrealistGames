@@ -75,7 +75,7 @@ namespace Controllers.Tests.cs
         {
             var mock = new Mock<IQuestionPrefixRepository>();
             mock.Setup(m => m.GetRandom()).Returns(() => 
-                new QuestionPrefix() {Content = "What is life?", QuestionPrefixId = 2});
+                new QuestionPrefix() {QuestionPrefixContent = "What is life?", QuestionPrefixId = 2});
             return mock;
         }
 
@@ -83,7 +83,7 @@ namespace Controllers.Tests.cs
         {
             var mock = new Mock<IQuestionSuffixRepository>();
             mock.Setup(m => m.GetRandom()).Returns(() =>
-                new QuestionSuffix() { Content = "Falling down 7 times, getting up 8.", QuestionSuffixId = 2 });
+                new QuestionSuffix() { QuestionSuffixContent = "Falling down 7 times, getting up 8.", QuestionSuffixId = 2 });
             return mock;
         }
 
@@ -117,8 +117,8 @@ namespace Controllers.Tests.cs
         {
             var result = ValidSubmissionResult("What is life?");
   
-            Assert.AreEqual("What is life?", result.GameOutcome.QuestionPrefix.Content);
-            Assert.AreEqual("Falling down 7 times, getting up 8.", result.GameOutcome.QuestionSuffix.Content);
+            Assert.AreEqual("What is life?", result.GameOutcome.QuestionPrefix.QuestionPrefixContent);
+            Assert.AreEqual("Falling down 7 times, getting up 8.", result.GameOutcome.QuestionSuffix.QuestionSuffixContent);
         }
 
         [Test]
@@ -164,7 +164,7 @@ namespace Controllers.Tests.cs
         {
             var result = ValidSubmissionResult("Why?");
 
-            Assert.AreEqual("Why?", result.GameOutcome.QuestionPrefix.Content);
+            Assert.AreEqual("Why?", result.GameOutcome.QuestionPrefix.QuestionPrefixContent);
         }
 
         [Test]
@@ -184,8 +184,8 @@ namespace Controllers.Tests.cs
 
             var result = controller.SubmitAnswer("Because.");
 
-            Assert.AreEqual("Because.", result.GameOutcome.QuestionSuffix.Content);
-            Assert.AreEqual("What is life?", result.GameOutcome.QuestionPrefix.Content);
+            Assert.AreEqual("Because.", result.GameOutcome.QuestionSuffix.QuestionSuffixContent);
+            Assert.AreEqual("What is life?", result.GameOutcome.QuestionPrefix.QuestionPrefixContent);
         }
 
         [Test]

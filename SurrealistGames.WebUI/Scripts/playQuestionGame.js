@@ -60,8 +60,8 @@ $(document).ready(function () {
 
 function onSubmitResponseHandler(data, textStatus, jqXHR) {
     if (data.Success) {
-        $("#question").html(data.GameOutcome.QuestionPrefix.Content);
-        $("#answer").html(data.GameOutcome.QuestionSuffix.Content);
+        $("#question").html(data.GameOutcome.QuestionPrefix.QuestionPrefixContent);
+        $("#answer").html(data.GameOutcome.QuestionSuffix.QuestionSuffixContent);
         $("#prefix").val("");
         $("#suffix").val("");
         $('input[name="QuestionPrefixId"]').val(data.GameOutcome.QuestionPrefix.QuestionPrefixId);
