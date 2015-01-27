@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,14 +16,14 @@ namespace SurrealistGames.Data
         {
             using (var db = new EfDbContext())
             {
-                var command = db.Database.ExecuteSqlCommand("exec SavedQuestion_Insert @QuestionPrefixId, @QuestionSuffixId, @UserInfoId",
+                 db.Database.ExecuteSqlCommand("exec SavedQuestion_Insert @QuestionPrefixId, @QuestionSuffixId, @UserInfoId",
                     new SqlParameter("@QuestionPrefixId", item.QuestionPrefixId),
                     new SqlParameter("@QuestionSuffixId", item.QuestionSuffixId),
                     new SqlParameter("@UserInfoId", item.UserInfoId));
             }
         }
 
-        public List<Models.UserSavedOutcomeView> GetAllSavedOutcomesByUserId(int userInfoId)
+        public async Task<List<Models.UserSavedOutcomeView>> GetAllSavedOutcomesByUserId(int userInfoId)
         {
             using(var db = new EfDbContext())
             {
@@ -34,7 +35,7 @@ namespace SurrealistGames.Data
                                     SavedQuestionId = x.SavedQuestionGameResultId
                                 });
 
-                return query.ToList();
+                return await query.ToListAsync();
             }
         }
 

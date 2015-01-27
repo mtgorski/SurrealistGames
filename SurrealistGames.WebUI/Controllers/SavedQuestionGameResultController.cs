@@ -13,6 +13,7 @@ using SurrealistGames.Models;
 using SurrealistGames.Models.Interfaces;
 using SurrealistGames.WebUI.Interfaces;
 using SurrealistGames.WebUI.Models;
+using System.Threading.Tasks;
 
 namespace SurrealistGames.WebUI.Controllers
 {
@@ -54,12 +55,12 @@ namespace SurrealistGames.WebUI.Controllers
         }
 
         [Authorize]
-        public ViewResult SavedResults(int page = 1, int pageSize = 5)
+        public async Task<ViewResult> SavedResults(int page = 1, int pageSize = 5)
         {
             
             var userInfoId = GetUserInfoId();
 
-            var favorites = _savedQuestionGameResultRepo.GetAllSavedOutcomesByUserId(userInfoId);
+            var favorites = await _savedQuestionGameResultRepo.GetAllSavedOutcomesByUserId(userInfoId);
 
             var model = new PagedList<UserSavedOutcomeView>(favorites, page, pageSize);
 

@@ -9,7 +9,7 @@ namespace SurrealistGames.Models.Interfaces
     public interface ISavedQuestionGameResultRepo
     {
         void Save(SavedQuestionGameResult item);
-        List<UserSavedOutcomeView> GetAllSavedOutcomesByUserId(int userInfoid);
+        Task<List<UserSavedOutcomeView>> GetAllSavedOutcomesByUserId(int userInfoid);
         bool UserOwnsSavedResult(int userInfoId, int savedQuestionId);
 
         void Delete(int savedQuestionId);

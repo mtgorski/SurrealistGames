@@ -80,37 +80,38 @@ namespace Controllers.Tests.cs
         }
 
         [Test]
-        public void SavedResults_CallsGetAllByUserIdOnGameStorageRepo()
+        public async void SavedResults_CallsGetAllByUserIdOnGameStorageRepo()
         {
             SetUpLoggedInUser("test", 3);
             FakeSavedOutcomeRepo.Setup(m => m.GetAllSavedOutcomesByUserId(It.IsAny<int>()))
-                .Returns(new List<UserSavedOutcomeView>());
-            ControllerUnderTest.SavedResults();
+                .Returns(Task.FromResult<List<UserSavedOutcomeView>>(new List<UserSavedOutcomeView>()));
+            await ControllerUnderTest.SavedResults();
 
             FakeSavedOutcomeRepo
                 .Verify(m => m.GetAllSavedOutcomesByUserId( It.Is<int>(x => x == 3)));
         }
 
         [Test]
-        public void SavedResults_RendersSavedResultsView()
+        public async void SavedResults_RendersSavedResultsView()
         {
             SetUpLoggedInUser("test", 5);
             FakeSavedOutcomeRepo.Setup(m => m.GetAllSavedOutcomesByUserId(It.IsAny<int>()))
-                .Returns(new List<UserSavedOutcomeView>());
+                .Returns(Task.FromResult<List<UserSavedOutcomeView>>(new List<UserSavedOutcomeView>()));
 
-            var result = ControllerUnderTest.SavedResults();
+            var result = await ControllerUnderTest.SavedResults();
 
             Assert.AreEqual(result.ViewName, "SavedResults");
         }
 
         [Test]
-        public void SavedResults_PassesPagedListOfOutcomesToView()
+        public async void SavedResults_PassesPagedListOfOutcomesToView()
         {
             SetUpLoggedInUser("test", 5);
             var model = new List<UserSavedOutcomeView>();
-            FakeSavedOutcomeRepo.Setup(m => m.GetAllSavedOutcomesByUserId(5)).Returns(model);
+            FakeSavedOutcomeRepo.Setup(m => m.GetAllSavedOutcomesByUserId(5))
+                .Returns(Task.FromResult<List<UserSavedOutcomeView>>(model));
 
-            var result = ControllerUnderTest.SavedResults();
+            var result = await ControllerUnderTest.SavedResults();
 
             var viewModel = result.Model as PagedList<UserSavedOutcomeView>;
             Assert.IsNotNull(viewModel);
