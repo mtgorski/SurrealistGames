@@ -13,8 +13,8 @@
 
     <div class="row">
         <div class="col-xs-8 col-sm-offset-1 well">
-            @Html.HiddenFor(m => m.QuestionPrefixId)
-            @Html.HiddenFor(m => m.QuestionSuffixId)
+            @Html.HiddenFor(m => m.QuestionId)
+            @Html.HiddenFor(m => m.AnswerId)
             <p class="lead">Q : <span id="question"></span></p>
             <p class="lead">A : <span id="answer"></span></p>
             <button class="btn btn-primary" onclick="return onRefreshClick()">Refresh</button>
@@ -53,10 +53,10 @@
                 method: 'GET',
                 cache: false,
                 success: function (data, textStatus, jqXHR) {
-                    $('#question').html(data.QuestionPrefix.QuestionPrefixContent);
-                    $('#answer').html(data.QuestionSuffix.QuestionSuffixContent);
-                    $('input[name="QuestionPrefixId"]').val(data.QuestionPrefix.QuestionPrefixId);
-                    $('input[name="QuestionSuffixId"]').val(data.QuestionSuffix.QuestionSuffixId);
+                    $('#question').html(data.Question.QuestionContent);
+                    $('#answer').html(data.Answer.AnswerContent);
+                    $('input[name="QuestionId"]').val(data.Question.QuestionId);
+                    $('input[name="AnswerId"]').val(data.Answer.AnswerId);
                     $("#saveButton").prop('disabled', false).html("Save");
                 }
             });

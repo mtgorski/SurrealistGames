@@ -13,66 +13,66 @@ namespace Repositories.Tests.cs
         [Test]
         public void GetOutcome_NoArgument_ReturnsOutcomeFromQuestionAndAnswerRepos()
         {
-            var prefixRepo = new Mock<IQuestionPrefixRepository>();
-            var suffixRepo = new Mock<IQuestionSuffixRepository>();
+            var prefixRepo = new Mock<IQuestionRepository>();
+            var suffixRepo = new Mock<IAnswerRepository>();
             prefixRepo.Setup(x => x.GetRandom())
-                .Returns(new QuestionPrefix()
+                .Returns(new Question()
                 {
-                    QuestionPrefixContent = "What is the essence of life?",
+                    QuestionContent = "What is the essence of life?",
                 });
             suffixRepo.Setup(x => x.GetRandom())
-                .Returns(new QuestionSuffix()
+                .Returns(new Answer()
                 {
-                    QuestionSuffixContent = "Forgotten dreams."
+                    AnswerContent = "Forgotten dreams."
                 });
 
             var outcomeGenerator = new QuestionGameOutcomeGenerator(prefixRepo.Object, suffixRepo.Object);
 
             var result = outcomeGenerator.GetOutcome();
 
-            Assert.AreEqual("What is the essence of life?", result.QuestionPrefix.QuestionPrefixContent);
-            Assert.AreEqual("Forgotten dreams.", result.QuestionSuffix.QuestionSuffixContent);
+            Assert.AreEqual("What is the essence of life?", result.Question.QuestionContent);
+            Assert.AreEqual("Forgotten dreams.", result.Answer.AnswerContent);
         }
 
         [Test]
         public void GetOutcome_PrefixGiven_ReturnsPrefixAndRandomSuffix()
         {
-            var prefixRepo = new Mock<IQuestionPrefixRepository>();
-            var suffixRepo = new Mock<IQuestionSuffixRepository>();
+            var prefixRepo = new Mock<IQuestionRepository>();
+            var suffixRepo = new Mock<IAnswerRepository>();
             suffixRepo.Setup(m => m.GetRandom())
-                .Returns(new QuestionSuffix()
+                .Returns(new Answer()
                 {
-                    QuestionSuffixContent = "Forgotten dreams."
+                    AnswerContent = "Forgotten dreams."
                 });
             var outcomeRepo = new QuestionGameOutcomeGenerator(prefixRepo.Object, suffixRepo.Object);
 
 
-            var prefix = new QuestionPrefix() { QuestionPrefixContent = "What are you?" };
+            var prefix = new Question() { QuestionContent = "What are you?" };
 
             var result = outcomeRepo.GetOutcome(prefix);
 
-            Assert.AreEqual(result.QuestionPrefix.QuestionPrefixContent, "What are you?");
-            Assert.AreEqual(result.QuestionSuffix.QuestionSuffixContent, "Forgotten dreams.");
+            Assert.AreEqual(result.Question.QuestionContent, "What are you?");
+            Assert.AreEqual(result.Answer.AnswerContent, "Forgotten dreams.");
         }
 
         [Test]
         public void GetOutcome_SuffixGiven_ReturnsSuffixAndRandomPrefix()
         {
-            var prefixRepo = new Mock<IQuestionPrefixRepository>();
-            var suffixRepo = new Mock<IQuestionSuffixRepository>();
+            var prefixRepo = new Mock<IQuestionRepository>();
+            var suffixRepo = new Mock<IAnswerRepository>();
             prefixRepo.Setup(m => m.GetRandom())
-               .Returns(new QuestionPrefix()
+               .Returns(new Question()
                {
-                   QuestionPrefixContent = "What is the essence of life?"
+                   QuestionContent = "What is the essence of life?"
                });
 
             var outcomeRepo = new QuestionGameOutcomeGenerator(prefixRepo.Object, suffixRepo.Object);
-            var suffix = new QuestionSuffix() { QuestionSuffixContent = "A living hell." };
+            var suffix = new Answer() { AnswerContent = "A living hell." };
 
             var result = outcomeRepo.GetOutcome(suffix);
 
-            Assert.AreEqual(result.QuestionPrefix.QuestionPrefixContent, "What is the essence of life?");
-            Assert.AreEqual(result.QuestionSuffix.QuestionSuffixContent, "A living hell.");
+            Assert.AreEqual(result.Question.QuestionContent, "What is the essence of life?");
+            Assert.AreEqual(result.Answer.AnswerContent, "A living hell.");
         }
     }
 }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SurrealistGames.Models.Interfaces
 {
-    public interface IQuestionSuffixRepository
+    public interface IAnswerRepository
     {
-        QuestionSuffix GetRandom();
-        void Save(QuestionSuffix prefix);
+        Answer GetRandom();
+        void Save(Answer prefix);
     }
 }

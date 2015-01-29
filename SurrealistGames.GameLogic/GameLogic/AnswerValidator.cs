@@ -5,7 +5,7 @@ using System.Web;
 
 namespace SurrealistGames.GameLogic
 {
-    public class AnswerValidator : IQuestionSuffixValidator
+    public class AnswerValidator : IAnswerValidator
     {
         public List<string> GetErrors(string content)
         {

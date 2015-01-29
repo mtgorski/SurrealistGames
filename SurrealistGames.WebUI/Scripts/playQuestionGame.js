@@ -60,12 +60,12 @@ $(document).ready(function () {
 
 function onSubmitResponseHandler(data, textStatus, jqXHR) {
     if (data.Success) {
-        $("#question").html(data.GameOutcome.QuestionPrefix.QuestionPrefixContent);
-        $("#answer").html(data.GameOutcome.QuestionSuffix.QuestionSuffixContent);
+        $("#question").html(data.GameOutcome.Question.QuestionContent);
+        $("#answer").html(data.GameOutcome.Answer.AnswerContent);
         $("#prefix").val("");
         $("#suffix").val("");
-        $('input[name="QuestionPrefixId"]').val(data.GameOutcome.QuestionPrefix.QuestionPrefixId);
-        $('input[name="QuestionSuffixId"]').val(data.GameOutcome.QuestionSuffix.QuestionSuffixId);
+        $('input[name="QuestionId"]').val(data.GameOutcome.Question.QuestionId);
+        $('input[name="AnswerId"]').val(data.GameOutcome.Answer.AnswerId);
         $('#saveButton').prop('disabled', false).html('Save');
     } else {
         //clear previous question and answer results
@@ -84,8 +84,8 @@ function onSubmitResponseHandler(data, textStatus, jqXHR) {
 
 function onSaveClick() {
     var postData = {};
-    postData.questionPrefixId = $('input[name="QuestionPrefixId"]').val();
-    postData.questionSuffixId = $('input[name="QuestionSuffixId"]').val();
+    postData.QuestionId = $('input[name="QuestionId"]').val();
+    postData.AnswerId = $('input[name="AnswerId"]').val();
 
     $.ajax(
     {

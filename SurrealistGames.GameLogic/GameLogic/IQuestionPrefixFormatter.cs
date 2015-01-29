@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SurrealistGames.GameLogic
 {
-    public interface IQuestionPrefixFormatter
+    public interface IQuestionFormatter
     {
         string Format(string content);
     }

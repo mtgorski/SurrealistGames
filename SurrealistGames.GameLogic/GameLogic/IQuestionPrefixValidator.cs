@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SurrealistGames.GameLogic
 {
-    public interface IQuestionPrefixValidator
+    public interface IQuestionValidator
     {
         List<string> GetErrors(string content);
     }

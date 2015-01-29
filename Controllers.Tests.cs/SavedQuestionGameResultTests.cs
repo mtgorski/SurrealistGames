@@ -62,8 +62,8 @@ namespace Controllers.Tests.cs
             ControllerUnderTest.Post(4, 3);
 
             FakeSavedOutcomeRepo.Verify( x => x.
-                Save(It.Is<SavedQuestionGameResult>((itemToSave) => itemToSave.QuestionPrefixId == 4 
-                                                    && itemToSave.QuestionSuffixId == 3
+                Save(It.Is<SavedQuestionGameResult>((itemToSave) => itemToSave.QuestionId == 4 
+                                                    && itemToSave.AnswerId == 3
                                                     && itemToSave.UserInfoId == 5)), Times.Once);
 
         }

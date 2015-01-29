@@ -5,31 +5,31 @@ namespace SurrealistGames.GameLogic.GameLogic
 {
     public class QuestionGameOutcomeGenerator
     {
-        private IQuestionPrefixRepository _prefixRepo;
-        private IQuestionSuffixRepository _suffixRepo;
+        private IQuestionRepository _prefixRepo;
+        private IAnswerRepository _suffixRepo;
 
-        public QuestionGameOutcomeGenerator(IQuestionPrefixRepository prefixRepo, 
-            IQuestionSuffixRepository suffixRepo)
+        public QuestionGameOutcomeGenerator(IQuestionRepository prefixRepo, 
+            IAnswerRepository suffixRepo)
         {
             _prefixRepo = prefixRepo;
             _suffixRepo = suffixRepo;
         }
 
-        public QuestionGameOutcome GetOutcome(Models.QuestionPrefix prefix)
+        public QuestionGameOutcome GetOutcome(Models.Question prefix)
         {
             return new QuestionGameOutcome()
             {
-                QuestionPrefix = prefix,
-                QuestionSuffix = _suffixRepo.GetRandom()
+                Question = prefix,
+                Answer = _suffixRepo.GetRandom()
             };
         }
 
-        public Models.QuestionGameOutcome GetOutcome(Models.QuestionSuffix suffix)
+        public Models.QuestionGameOutcome GetOutcome(Models.Answer suffix)
         {
             return new QuestionGameOutcome()
             {
-                QuestionPrefix = _prefixRepo.GetRandom(),
-                QuestionSuffix = suffix
+                Question = _prefixRepo.GetRandom(),
+                Answer = suffix
             };
         }
 
@@ -37,8 +37,8 @@ namespace SurrealistGames.GameLogic.GameLogic
         {
             return new QuestionGameOutcome()
             {
-                QuestionPrefix = _prefixRepo.GetRandom(),
-                QuestionSuffix = _suffixRepo.GetRandom()
+                Question = _prefixRepo.GetRandom(),
+                Answer = _suffixRepo.GetRandom()
             };
         }
     }

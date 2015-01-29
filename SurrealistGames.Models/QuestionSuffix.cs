@@ -5,9 +5,9 @@ using System.Web;
 
 namespace SurrealistGames.Models
 {
-    public class QuestionSuffix
+    public class Answer
     {
-        public string QuestionSuffixContent { get; set; }
-        public int QuestionSuffixId { get; set; }
+        public string AnswerContent { get; set; }
+        public int AnswerId { get; set; }
     }
 }

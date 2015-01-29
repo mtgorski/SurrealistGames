@@ -5,7 +5,7 @@ using System.Web;
 
 namespace SurrealistGames.GameLogic
 {
-    public class AnswerFormatter : IQuestionSuffixFormatter
+    public class AnswerFormatter : IAnswerFormatter
     {
         public string Format(string content)
         {

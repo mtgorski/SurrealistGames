@@ -9,38 +9,38 @@ using System.Threading.Tasks;
 
 namespace SurrealistGames.Data
 {
-    public class EfQuestionSuffixRepository : IQuestionSuffixRepository
+    public class EfAnswerRepository : IAnswerRepository
     {
         private readonly IRandomBehavior _rng;
 
-        public EfQuestionSuffixRepository(IRandomBehavior rng)
+        public EfAnswerRepository(IRandomBehavior rng)
         {
             _rng = rng;
         }
 
-        public Models.QuestionSuffix GetRandom()
+        public Models.Answer GetRandom()
         {
             using (var db = new EfDbContext())
             {
-                var maxRandomId = db.Database.SqlQuery<int>("exec RandomQuestionSuffix_MaxRandomId").First();
+                var maxRandomId = db.Database.SqlQuery<int>("exec RandomAnswer_MaxRandomId").First();
 
                 var questionId = _rng.GetRandom(1, maxRandomId);
 
-                var questionQuery = db.Database.SqlQuery<Models.QuestionSuffix>("exec QuestionSuffix_GetRandom @RandomQuestionSuffixId",
-                    new SqlParameter("@RandomQuestionSuffixId", questionId));
+                var questionQuery = db.Database.SqlQuery<Models.Answer>("exec Answer_GetRandom @RandomAnswerId",
+                    new SqlParameter("@RandomAnswerId", questionId));
 
                 return questionQuery.FirstOrDefault();
             }
         }
 
-        public void Save(Models.QuestionSuffix prefix)
+        public void Save(Models.Answer prefix)
         {
             using (var db = new EfDbContext())
             {
-                var insertId = db.Database.SqlQuery<int>("exec QuestionSuffix_Insert @QuestionSuffixContent",
-                    new SqlParameter("@QuestionSuffixContent", prefix.QuestionSuffixContent));
+                var insertId = db.Database.SqlQuery<int>("exec Answer_Insert @AnswerContent",
+                    new SqlParameter("@AnswerContent", prefix.AnswerContent));
 
-                prefix.QuestionSuffixId = insertId.First();
+                prefix.AnswerId = insertId.First();
             }
         }
     }

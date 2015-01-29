@@ -123,40 +123,40 @@ ALTER TABLE [dbo].[AspNetUserRoles] CHECK CONSTRAINT [FK_dbo.AspNetUserRoles_dbo
 GO
 
 
-create table QuestionPrefix
+create table Question
 (
-	[QuestionPrefixID] [int] identity(1, 1) primary key,
-	[QuestionPrefixContent] varchar(300) not null
+	[QuestionID] [int] identity(1, 1) primary key,
+	[QuestionContent] varchar(300) not null
 )
 
 create table QuestionReport
 (
 	[QuestionReportID] [int] identity(1, 1) primary key,
-	[QuestionPrefixID] [int] not null
+	[QuestionID] [int] not null
 )
 
 create table AnswerReport
 (
 	[AnswerReportID] [int] identity(1, 1) primary key,
-	[QuestionSuffixID] [int] not null
+	[AnswerID] [int] not null
 )
 
-create table QuestionSuffix
+create table Answer
 (
-	[QuestionSuffixID] [int] identity(1, 1) primary key,
-	[QuestionSuffixContent] varchar(300) not null
+	[AnswerID] [int] identity(1, 1) primary key,
+	[AnswerContent] varchar(300) not null
 )
 
-create table RandomQuestionPrefix
+create table RandomQuestion
 (
-	[RandomQuestionPrefixID] [int] not null primary key,
-	[QuestionPrefixID] [int] not null,
+	[RandomQuestionID] [int] not null primary key,
+	[QuestionID] [int] not null,
 )
 
-create table RandomQuestionSuffix
+create table RandomAnswer
 (
-	[RandomQuestionSuffixID] [int] not null primary key,
-	[QuestionSuffixID] [int] not null
+	[RandomAnswerID] [int] not null primary key,
+	[AnswerID] [int] not null
 )	
 
 create table UserInfo
@@ -168,102 +168,102 @@ create table UserInfo
 create table SavedQuestionGameResult
 (
 	[SavedQuestionId] int Identity(1, 1) primary key,
-	[QuestionPrefixId] int not null,
-	[QuestionSuffixId] int not null,
+	[QuestionId] int not null,
+	[AnswerId] int not null,
 	[UserInfoId] int not null
 )
 
 alter table QuestionReport
-	add constraint FK_QuestionReport_QuestionPrefix foreign key (QuestionPrefixID)
-	references QuestionPrefix (QuestionPrefixID)
+	add constraint FK_QuestionReport_Question foreign key (QuestionID)
+	references Question (QuestionID)
 
 alter table AnswerReport
-	add constraint FK_AnswerReport_QuestionSuffix foreign key (QuestionSuffixID)
-	references QuestionSuffix (QuestionSuffixID)
+	add constraint FK_AnswerReport_Answer foreign key (AnswerID)
+	references Answer (AnswerID)
 
 alter table UserInfo
 	add constraint FK_UserInfo_AspNetUsers foreign key (Id)
 	references AspNetUsers (Id) 
 
 alter table SavedQuestionGameResult
-	add constraint FK_SavedQuestionGameResult_QuestionPrefix foreign key (QuestionPrefixId)
-	references QuestionPrefix (QuestionPrefixId)
+	add constraint FK_SavedQuestionGameResult_Question foreign key (QuestionId)
+	references Question (QuestionId)
 
 alter table SavedQuestionGameResult
-	add constraint FK_SavedQuestionGameResult_QuestionSuffix foreign key (QuestionSuffixId)
-	references QuestionSuffix (QuestionSuffixId)
+	add constraint FK_SavedQuestionGameResult_Answer foreign key (AnswerId)
+	references Answer (AnswerId)
 
 alter table SavedQuestionGameResult
 	add constraint FK_SavedQuestionGameResult_UserInfo foreign key (UserInfoId)
 	references UserInfo (UserInfoId)
 go
 
-create procedure QuestionPrefix_GetRandom(
-	@RandomQuestionPrefixId int
+create procedure Question_GetRandom(
+	@RandomQuestionId int
 )
 as
-	select * from QuestionPrefix
-	where QuestionPrefixId = (select QuestionPrefixId
-								from RandomQuestionPrefix
-								where RandomQuestionPrefixId = @RandomQuestionPrefixId)
+	select * from Question
+	where QuestionId = (select QuestionId
+								from RandomQuestion
+								where RandomQuestionId = @RandomQuestionId)
 go
 
-create procedure QuestionSuffix_GetRandom(
- @RandomQuestionSuffixId int
+create procedure Answer_GetRandom(
+ @RandomAnswerId int
  )
 as
-	select * from QuestionSuffix 
-	where QuestionSuffixId = (select QuestionSuffixId 
-								from RandomQuestionSuffix
-								where RandomQuestionSuffixId = @RandomQuestionSuffixId)
+	select * from Answer 
+	where AnswerId = (select AnswerId 
+								from RandomAnswer
+								where RandomAnswerId = @RandomAnswerId)
 go
 
-create procedure RandomQuestionPrefix_MaxRandomId
+create procedure RandomQuestion_MaxRandomId
 as
-	select Max(RandomQuestionPrefixId) as MaxRandomQuestionPrefixId from RandomQuestionPrefix;
+	select Max(RandomQuestionId) as MaxRandomQuestionId from RandomQuestion;
 go
 
-create procedure RandomQuestionSuffix_MaxRandomId
+create procedure RandomAnswer_MaxRandomId
 as
-	select Max(RandomQuestionSuffixId) as MaxRandomQuestionSuffixId from RandomQuestionSuffix;
+	select Max(RandomAnswerId) as MaxRandomAnswerId from RandomAnswer;
 go
 
-create procedure QuestionPrefix_Insert
+create procedure Question_Insert
 (
-	@QuestionPrefixContent varchar(300)
+	@QuestionContent varchar(300)
 ) as
 begin transaction
-	insert into QuestionPrefix(QuestionPrefixContent)
-	values (@QuestionPrefixContent);
+	insert into Question(QuestionContent)
+	values (@QuestionContent);
 
 	declare @NewId int
 	set @NewId = SCOPE_IDENTITY()
 
-	insert into RandomQuestionPrefix(QuestionPrefixID, RandomQuestionPrefixID)
-	values (@NewId, (select Max(RandomQuestionPrefixID) + 1 
-								from RandomQuestionPrefix ));
+	insert into RandomQuestion(QuestionID, RandomQuestionID)
+	values (@NewId, (select Max(RandomQuestionID) + 1 
+								from RandomQuestion ));
 commit transaction
 
-	select @NewId as QuestionPrefixId
+	select @NewId as QuestionId
 go
 
-create procedure QuestionSuffix_Insert
+create procedure Answer_Insert
 (
-	@QuestionSuffixContent varchar(300)
+	@AnswerContent varchar(300)
 ) as
 begin transaction
-	insert into QuestionSuffix(QuestionSuffixContent)
-	values (@QuestionSuffixContent);
+	insert into Answer(AnswerContent)
+	values (@AnswerContent);
 
 	declare @NewId int
 	set @NewId = SCOPE_IDENTITY()
 
-	insert into RandomQuestionSuffix(QuestionSuffixID, RandomQuestionSuffixID)
-	values(@NewId, (select Max(RandomQuestionSuffixID) + 1
-								from RandomQuestionSuffix ));
+	insert into RandomAnswer(AnswerID, RandomAnswerID)
+	values(@NewId, (select Max(RandomAnswerID) + 1
+								from RandomAnswer ));
 commit transaction
 
-	select @NewId as QuestionSuffixId
+	select @NewId as AnswerId
 go
 
 
@@ -280,21 +280,21 @@ go
 
 create procedure SavedQuestion_Insert
 (
-	@QuestionPrefixId int,
-	@QuestionSuffixId int,
+	@QuestionId int,
+	@AnswerId int,
 	@UserInfoId int
 )
 as
 declare @AlreadySaved bit
 
 if not exists(select * from SavedQuestionGameResult 
-							where QuestionPrefixId = @QuestionPrefixId
-							and QuestionSuffixId = @QuestionPrefixId
+							where QuestionId = @QuestionId
+							and AnswerId = @QuestionId
 							and UserInfoId = @UserInfoId)
 begin
 	begin transaction
-		insert into SavedQuestionGameResult(QuestionPrefixId, QuestionSuffixId, UserInfoId)
-		values (@QuestionPrefixId, @QuestionSuffixId, @UserInfoId)
+		insert into SavedQuestionGameResult(QuestionId, AnswerId, UserInfoId)
+		values (@QuestionId, @AnswerId, @UserInfoId)
 	commit transaction
 end
 go
@@ -312,11 +312,11 @@ create procedure UserInfo_GetSavedQuestions
 	@UserInfoId int
 ) 
 as
-	select sqgr.SavedQuestionId as SavedQuestionId, qp.QuestionPrefixContent as Question, qs.QuestionSuffixContent as Answer 
+	select sqgr.SavedQuestionId as SavedQuestionId, qp.QuestionContent as Question, qs.AnswerContent as Answer 
 	from UserInfo ui
 	inner join SavedQuestionGameResult sqgr on ui.UserInfoId = sqgr.UserInfoId
-	inner join QuestionPrefix qp on sqgr.QuestionPrefixId = qp.QuestionPrefixID
-	inner join QuestionSuffix qs on sqgr.QuestionSuffixId = qs.QuestionSuffixID
+	inner join Question qp on sqgr.QuestionId = qp.QuestionID
+	inner join Answer qs on sqgr.AnswerId = qs.AnswerID
 	where ui.UserInfoId = @UserInfoId
 go
 
@@ -349,32 +349,32 @@ create procedure RandomQuestion_ResetIDsAfterDelete
 as
 	with randomRows as
 	(
-		select *, ROW_NUMBER() over(order by RandomQuestionPrefixID) as rowNumber 
-		from RandomQuestionPrefix
+		select *, ROW_NUMBER() over(order by RandomQuestionID) as rowNumber 
+		from RandomQuestion
 	)
 
 	update randomRows
-	set RandomQuestionPrefixID = rowNumber
-	where rowNumber != RandomQuestionPrefixID	
+	set RandomQuestionID = rowNumber
+	where rowNumber != RandomQuestionID	
 go
 
 create procedure RandomAnswer_ResetIDsAfterDelete
 as
 	with randomRows as
 	(
-		select *, ROW_NUMBER() over(order by RandomQuestionSuffixID) as rowNumber 
-		from RandomQuestionSuffix
+		select *, ROW_NUMBER() over(order by RandomAnswerID) as rowNumber 
+		from RandomAnswer
 	)
 
 	update randomRows
-	set RandomQuestionSuffixID = rowNumber
-	where rowNumber != RandomQuestionSuffixID	
+	set RandomAnswerID = rowNumber
+	where rowNumber != RandomAnswerID	
 go
 
 use SurrealistGames
 go
 
-insert into QuestionPrefix(QuestionPrefixContent)
+insert into Question(QuestionContent)
 values 
 		('What is the meaning of life?'),
 		('What is the deepest thought man is capable of?'),
@@ -382,7 +382,7 @@ values
 		('What is man''s best friend?'),
 		('What is the most important thing in the universe?');
 
-insert into QuestionSuffix(QuestionSuffixContent)
+insert into Answer(AnswerContent)
 values
 		('Nothing at all.'),
 		('99 red balloons.'),
@@ -391,7 +391,7 @@ values
 		('Mellow yellow.'),
 		('Falling down 7 times, getting up 8.');
 
-insert into RandomQuestionPrefix(RandomQuestionPrefixID, QuestionPrefixID)
+insert into RandomQuestion(RandomQuestionID, QuestionID)
 values 
 		(1, 1),
 		(2, 2),
@@ -399,7 +399,7 @@ values
 		(4, 4),
 		(5, 5);
 
-insert into RandomQuestionSuffix(RandomQuestionSuffixID, QuestionSuffixID)
+insert into RandomAnswer(RandomAnswerID, AnswerID)
 values
 		(1, 1),
 		(2, 2),
@@ -425,7 +425,7 @@ select @UserInfoId = UserInfoId
 	from UserInfo
 	where UserInfo.Id = '99ba7c1f-9091-443a-a9d1-78c0ac54b357'
 
-insert into SavedQuestionGameResult (UserInfoId, QuestionPrefixId, QuestionSuffixId)
+insert into SavedQuestionGameResult (UserInfoId, QuestionId, AnswerId)
 values (@UserInfoId, 2, 1),
        (@UserInfoId, 5, 3),
        (@UserInfoId, 2, 4)

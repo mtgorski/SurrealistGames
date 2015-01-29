@@ -11,38 +11,38 @@ using System.Threading.Tasks;
 
 namespace SurrealistGames.Data
 {
-    public class EfQuestionPrefixRepository : IQuestionPrefixRepository
+    public class EfQuestionRepository : IQuestionRepository
     {
         private readonly IRandomBehavior _rng;
 
-        public EfQuestionPrefixRepository(IRandomBehavior rng)
+        public EfQuestionRepository(IRandomBehavior rng)
         {
             _rng = rng;
         }
 
-        public Models.QuestionPrefix GetRandom()
+        public Models.Question GetRandom()
         {
             using(var db = new EfDbContext())
             {
-                var maxRandomId = db.Database.SqlQuery<int>("exec RandomQuestionPrefix_MaxRandomId").First();
+                var maxRandomId = db.Database.SqlQuery<int>("exec RandomQuestion_MaxRandomId").First();
 
                 var questionId = _rng.GetRandom(1, maxRandomId);
 
-                var questionQuery = db.Database.SqlQuery<Models.QuestionPrefix>("exec QuestionPrefix_GetRandom @RandomQuestionPrefixId",
-                    new SqlParameter("@RandomQuestionPrefixId", questionId));
+                var questionQuery = db.Database.SqlQuery<Models.Question>("exec Question_GetRandom @RandomQuestionId",
+                    new SqlParameter("@RandomQuestionId", questionId));
 
                 return questionQuery.FirstOrDefault();
             }
         }
 
-        public void Save(Models.QuestionPrefix prefix)
+        public void Save(Models.Question prefix)
         {
             using(var db = new EfDbContext())
             {
-                var insertId = db.Database.SqlQuery<int>("exec QuestionPrefix_Insert @QuestionPrefixContent",
-                    new SqlParameter("@QuestionPrefixContent", prefix.QuestionPrefixContent));
+                var insertId = db.Database.SqlQuery<int>("exec Question_Insert @QuestionContent",
+                    new SqlParameter("@QuestionContent", prefix.QuestionContent));
 
-                prefix.QuestionPrefixId = insertId.First();
+                prefix.QuestionId = insertId.First();
             }
         }
     }

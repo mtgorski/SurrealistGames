@@ -10,16 +10,16 @@ namespace SurrealistGames.WebUI.Controllers
     public class QuestionGameController : Controller
     {
         private QuestionGameOutcomeGenerator _generator;
-        private IQuestionPrefixRepository _prefixRepo;
-        private IQuestionSuffixRepository _suffixRepo;
-        private IQuestionPrefixValidator _questionValidator;
-        private IQuestionPrefixFormatter _questionFormatter;
-        private IQuestionSuffixFormatter _answerFormatter;
-        private IQuestionSuffixValidator _answerValidator;
+        private IQuestionRepository _prefixRepo;
+        private IAnswerRepository _suffixRepo;
+        private IQuestionValidator _questionValidator;
+        private IQuestionFormatter _questionFormatter;
+        private IAnswerFormatter _answerFormatter;
+        private IAnswerValidator _answerValidator;
 
-        public QuestionGameController(IQuestionPrefixRepository prefixRepo, IQuestionSuffixRepository suffixRepo,
-              IQuestionPrefixValidator questionValidator, IQuestionPrefixFormatter questionFormatter,
-              IQuestionSuffixValidator answerValidator, IQuestionSuffixFormatter answerFormatter)
+        public QuestionGameController(IQuestionRepository prefixRepo, IAnswerRepository suffixRepo,
+              IQuestionValidator questionValidator, IQuestionFormatter questionFormatter,
+              IAnswerValidator answerValidator, IAnswerFormatter answerFormatter)
         {
             _prefixRepo = prefixRepo;
             _suffixRepo = suffixRepo;
@@ -58,7 +58,7 @@ namespace SurrealistGames.WebUI.Controllers
             if (!result.ErrorMessages.Any())
             {
                 var formattedQuestion = _questionFormatter.Format(questionContent);
-                var prefix = new QuestionPrefix() { QuestionPrefixContent = formattedQuestion };
+                var prefix = new Question() { QuestionContent = formattedQuestion };
                 result.GameOutcome = _generator.GetOutcome(prefix);
                 result.Success = true;
                 _prefixRepo.Save(prefix);
@@ -83,7 +83,7 @@ namespace SurrealistGames.WebUI.Controllers
             if (!result.ErrorMessages.Any())
             {
                 var formattedAnswer = _answerFormatter.Format(answerContent);
-                var suffix = new QuestionSuffix() { QuestionSuffixContent = formattedAnswer };
+                var suffix = new Answer() { AnswerContent = formattedAnswer };
                 result.GameOutcome = _generator.GetOutcome(suffix);
                 result.Success = true;
                 _suffixRepo.Save(suffix);
@@ -96,8 +96,8 @@ namespace SurrealistGames.WebUI.Controllers
         {
             var outcome = new QuestionGameOutcome()
             {
-                QuestionSuffix = _suffixRepo.GetRandom(),
-                QuestionPrefix = _prefixRepo.GetRandom()
+                Answer = _suffixRepo.GetRandom(),
+                Question = _prefixRepo.GetRandom()
             };
 
             return Json(outcome, JsonRequestBehavior.AllowGet);

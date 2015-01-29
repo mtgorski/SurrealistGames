@@ -16,9 +16,9 @@ namespace SurrealistGames.Data
         {
             using (var db = new EfDbContext())
             {
-                 db.Database.ExecuteSqlCommand("exec SavedQuestion_Insert @QuestionPrefixId, @QuestionSuffixId, @UserInfoId",
-                    new SqlParameter("@QuestionPrefixId", item.QuestionPrefixId),
-                    new SqlParameter("@QuestionSuffixId", item.QuestionSuffixId),
+                 db.Database.ExecuteSqlCommand("exec SavedQuestion_Insert @QuestionId, @AnswerId, @UserInfoId",
+                    new SqlParameter("@QuestionId", item.QuestionId),
+                    new SqlParameter("@AnswerId", item.AnswerId),
                     new SqlParameter("@UserInfoId", item.UserInfoId));
             }
         }
@@ -30,8 +30,8 @@ namespace SurrealistGames.Data
                 var query = db.UserSavedOutcomes.Where(x => x.UserInfoId == userInfoId)
                                 .Select(x => new Models.UserSavedOutcomeView
                                 {
-                                    Question = x.QuestionPrefix.QuestionPrefixContent,
-                                    Answer = x.QuestionSuffix.QuestionSuffixContent,
+                                    Question = x.Question.QuestionContent,
+                                    Answer = x.Answer.AnswerContent,
                                     SavedQuestionId = x.SavedQuestionGameResultId
                                 });
 

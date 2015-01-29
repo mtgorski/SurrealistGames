@@ -32,7 +32,7 @@ namespace SurrealistGames.WebUI.Controllers
             
         }
 
-        public JsonResult Post(int questionPrefixId, int questionSuffixId)
+        public JsonResult Post(int QuestionId, int AnswerId)
         {
             var result = new SaveQuestionGamePostResult();
             
@@ -40,8 +40,8 @@ namespace SurrealistGames.WebUI.Controllers
             {
                 var itemToSave = new SavedQuestionGameResult()
                 {
-                    QuestionPrefixId = questionPrefixId,
-                    QuestionSuffixId = questionSuffixId,
+                    QuestionId = QuestionId,
+                    AnswerId = AnswerId,
                     UserInfoId = _userInfoRepo.GetByAspId(_userUtility.GetAspId(this)).UserInfoId
                 };
                 _savedQuestionGameResultRepo.Save(itemToSave);

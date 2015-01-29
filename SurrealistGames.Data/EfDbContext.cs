@@ -13,8 +13,8 @@ namespace SurrealistGames.Data
     {
         public DbSet<UserInfo> UserInfos { get; set; }
         public DbSet<SavedQuestionGameResult> UserSavedOutcomes { get; set; }
-        public DbSet<QuestionPrefix> QuestionPrefixes { get; set; }
-        public DbSet<QuestionSuffix> QuestionSuffixes { get; set; }
+        public DbSet<Question> Questiones { get; set; }
+        public DbSet<Answer> Answeres { get; set; }
 
         public EfDbContext() : base(Settings.GetConnectionString())
         {
@@ -32,9 +32,9 @@ namespace SurrealistGames.Data
 
             modelBuilder.Entity<UserInfo>().ToTable("dbo.UserInfo");
 
-            modelBuilder.Entity<QuestionPrefix>().ToTable("dbo.QuestionPrefix");
+            modelBuilder.Entity<Question>().ToTable("dbo.Question");
 
-            modelBuilder.Entity<QuestionSuffix>().ToTable("dbo.QuestionSuffix");
+            modelBuilder.Entity<Answer>().ToTable("dbo.Answer");
         }
     }
 }

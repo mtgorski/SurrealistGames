@@ -6,7 +6,7 @@ using System.Web;
 
 namespace SurrealistGames.GameLogic
 {
-    public class QuestionValidator : IQuestionPrefixValidator
+    public class QuestionValidator : IQuestionValidator
     {
         public List<string> GetErrors(string question)
         {

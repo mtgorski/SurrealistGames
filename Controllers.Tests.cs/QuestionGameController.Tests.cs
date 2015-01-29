@@ -21,9 +21,9 @@ namespace Controllers.Tests.cs
             return randomMock;
         }
 
-        public Mock<IQuestionPrefixValidator> GetQuestionValidatorMock(bool valid)
+        public Mock<IQuestionValidator> GetQuestionValidatorMock(bool valid)
         {
-            var validatorMock = new Mock<IQuestionPrefixValidator>();
+            var validatorMock = new Mock<IQuestionValidator>();
             if (valid)
             {
                 validatorMock.Setup(m => m.GetErrors(It.IsAny<string>()))
@@ -38,9 +38,9 @@ namespace Controllers.Tests.cs
             return validatorMock;
         }
 
-        public Mock<IQuestionSuffixValidator> GetAnswerValidatorMock(bool valid)
+        public Mock<IAnswerValidator> GetAnswerValidatorMock(bool valid)
         {
-            var validatorMock = new Mock<IQuestionSuffixValidator>();
+            var validatorMock = new Mock<IAnswerValidator>();
             if (valid)
             {
                 validatorMock.Setup(m => m.GetErrors(It.IsAny<string>()))
@@ -55,35 +55,35 @@ namespace Controllers.Tests.cs
             return validatorMock;
         }
 
-        public Mock<IQuestionPrefixFormatter> GetQuestionFormatterMock()
+        public Mock<IQuestionFormatter> GetQuestionFormatterMock()
         {
-            var formatterMock = new Mock<IQuestionPrefixFormatter>();
+            var formatterMock = new Mock<IQuestionFormatter>();
             formatterMock.Setup(m => m.Format(It.IsAny<string>()))
                 .Returns<string>(value => value);
             return formatterMock;
         }
 
-        public Mock<IQuestionSuffixFormatter> GetAnswerFormatterMock()
+        public Mock<IAnswerFormatter> GetAnswerFormatterMock()
         {
-            var formatterMock = new Mock<IQuestionSuffixFormatter>();
+            var formatterMock = new Mock<IAnswerFormatter>();
             formatterMock.Setup(m => m.Format(It.IsAny<string>()))
                 .Returns<string>(value => value);
             return formatterMock;
         }
 
-        public Mock<IQuestionPrefixRepository> GetPrefixRepoMock()
+        public Mock<IQuestionRepository> GetPrefixRepoMock()
         {
-            var mock = new Mock<IQuestionPrefixRepository>();
+            var mock = new Mock<IQuestionRepository>();
             mock.Setup(m => m.GetRandom()).Returns(() => 
-                new QuestionPrefix() {QuestionPrefixContent = "What is life?", QuestionPrefixId = 2});
+                new Question() {QuestionContent = "What is life?", QuestionId = 2});
             return mock;
         }
 
-        public Mock<IQuestionSuffixRepository> GetSuffixRepoMock()
+        public Mock<IAnswerRepository> GetSuffixRepoMock()
         {
-            var mock = new Mock<IQuestionSuffixRepository>();
+            var mock = new Mock<IAnswerRepository>();
             mock.Setup(m => m.GetRandom()).Returns(() =>
-                new QuestionSuffix() { QuestionSuffixContent = "Falling down 7 times, getting up 8.", QuestionSuffixId = 2 });
+                new Answer() { AnswerContent = "Falling down 7 times, getting up 8.", AnswerId = 2 });
             return mock;
         }
 
@@ -117,8 +117,8 @@ namespace Controllers.Tests.cs
         {
             var result = ValidSubmissionResult("What is life?");
   
-            Assert.AreEqual("What is life?", result.GameOutcome.QuestionPrefix.QuestionPrefixContent);
-            Assert.AreEqual("Falling down 7 times, getting up 8.", result.GameOutcome.QuestionSuffix.QuestionSuffixContent);
+            Assert.AreEqual("What is life?", result.GameOutcome.Question.QuestionContent);
+            Assert.AreEqual("Falling down 7 times, getting up 8.", result.GameOutcome.Answer.AnswerContent);
         }
 
         [Test]
@@ -145,7 +145,7 @@ namespace Controllers.Tests.cs
 
             controller.SubmitQuestion("What is this?");
 
-            prefixRepo.Verify(m => m.Save(It.IsAny<QuestionPrefix>()));
+            prefixRepo.Verify(m => m.Save(It.IsAny<Question>()));
         }
 
         [Test]
@@ -164,7 +164,7 @@ namespace Controllers.Tests.cs
         {
             var result = ValidSubmissionResult("Why?");
 
-            Assert.AreEqual("Why?", result.GameOutcome.QuestionPrefix.QuestionPrefixContent);
+            Assert.AreEqual("Why?", result.GameOutcome.Question.QuestionContent);
         }
 
         [Test]
@@ -184,8 +184,8 @@ namespace Controllers.Tests.cs
 
             var result = controller.SubmitAnswer("Because.");
 
-            Assert.AreEqual("Because.", result.GameOutcome.QuestionSuffix.QuestionSuffixContent);
-            Assert.AreEqual("What is life?", result.GameOutcome.QuestionPrefix.QuestionPrefixContent);
+            Assert.AreEqual("Because.", result.GameOutcome.Answer.AnswerContent);
+            Assert.AreEqual("What is life?", result.GameOutcome.Question.QuestionContent);
         }
 
         [Test]
@@ -198,7 +198,7 @@ namespace Controllers.Tests.cs
 
             controller.SubmitAnswer("Because.");
 
-            suffixRepoMock.Verify(m => m.Save(It.IsAny<QuestionSuffix>()));
+            suffixRepoMock.Verify(m => m.Save(It.IsAny<Answer>()));
         }
 
         [Test]
