@@ -1,4 +1,7 @@
-use SurrealistGames
+use master
+go
+
+create database SurrealistGames
 go
 
 USE [SurrealistGames]
@@ -126,6 +129,18 @@ create table QuestionPrefix
 	[QuestionPrefixContent] varchar(300) not null
 )
 
+create table QuestionReport
+(
+	[QuestionReportID] [int] identity(1, 1) primary key,
+	[QuestionPrefixID] [int] not null
+)
+
+create table AnswerReport
+(
+	[AnswerReportID] [int] identity(1, 1) primary key,
+	[QuestionSuffixID] [int] not null
+)
+
 create table QuestionSuffix
 (
 	[QuestionSuffixID] [int] identity(1, 1) primary key,
@@ -135,13 +150,13 @@ create table QuestionSuffix
 create table RandomQuestionPrefix
 (
 	[RandomQuestionPrefixID] [int] not null primary key,
-	[QuestionPrefixID] [int] null,
+	[QuestionPrefixID] [int] not null,
 )
 
 create table RandomQuestionSuffix
 (
 	[RandomQuestionSuffixID] [int] not null primary key,
-	[QuestionSuffixID] [int] null
+	[QuestionSuffixID] [int] not null
 )	
 
 create table UserInfo
@@ -157,6 +172,14 @@ create table SavedQuestionGameResult
 	[QuestionSuffixId] int not null,
 	[UserInfoId] int not null
 )
+
+alter table QuestionReport
+	add constraint FK_QuestionReport_QuestionPrefix foreign key (QuestionPrefixID)
+	references QuestionPrefix (QuestionPrefixID)
+
+alter table AnswerReport
+	add constraint FK_AnswerReport_QuestionSuffix foreign key (QuestionSuffixID)
+	references QuestionSuffix (QuestionSuffixID)
 
 alter table UserInfo
 	add constraint FK_UserInfo_AspNetUsers foreign key (Id)
@@ -320,6 +343,32 @@ create procedure SavedQuestionGameResult_Delete
 as
 	delete from SavedQuestionGameResult
 		where SavedQuestionId = @SavedQuestionId
+go
+
+create procedure RandomQuestion_ResetIDsAfterDelete
+as
+	with randomRows as
+	(
+		select *, ROW_NUMBER() over(order by RandomQuestionPrefixID) as rowNumber 
+		from RandomQuestionPrefix
+	)
+
+	update randomRows
+	set RandomQuestionPrefixID = rowNumber
+	where rowNumber != RandomQuestionPrefixID	
+go
+
+create procedure RandomAnswer_ResetIDsAfterDelete
+as
+	with randomRows as
+	(
+		select *, ROW_NUMBER() over(order by RandomQuestionSuffixID) as rowNumber 
+		from RandomQuestionSuffix
+	)
+
+	update randomRows
+	set RandomQuestionSuffixID = rowNumber
+	where rowNumber != RandomQuestionSuffixID	
 go
 
 use SurrealistGames
