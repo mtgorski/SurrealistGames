@@ -10,5 +10,6 @@ namespace SurrealistGames.Models.Interfaces
     {
         Question GetRandom();
         void Save(Question prefix);
+        void Disable(int questionId);
     }
 }

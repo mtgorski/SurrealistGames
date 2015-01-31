@@ -43,5 +43,11 @@ namespace SurrealistGames.Data
                 prefix.AnswerId = insertId.First();
             }
         }
+
+
+        public void Disable(int answerId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
