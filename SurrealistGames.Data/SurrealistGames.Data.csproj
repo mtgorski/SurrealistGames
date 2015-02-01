@@ -51,8 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EfDbContext.cs" />
-    <Compile Include="EfQuestionPrefixRepository.cs" />
-    <Compile Include="EfQuestionSuffixRepository.cs" />
+    <Compile Include="EfQuestionRepository.cs" />
+    <Compile Include="EfAnswerRepository.cs" />
     <Compile Include="EfSavedQuestionGameResultRepository.cs" />
     <Compile Include="EfUserInfoRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

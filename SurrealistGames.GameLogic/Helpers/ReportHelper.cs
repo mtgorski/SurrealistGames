@@ -32,12 +32,38 @@ namespace SurrealistGames.GameLogic.Helpers
         public Models.ReportResponse MakeReport(Models.ReportRequest request)
         {
             var report = _mapper.Map<ReportRequest, Report>(request);
+
+            var reports = GetValidReports(request);
+            var previousNumberOfReports = reports.Count;
+
+            var numberOfReports = NewNumberOfReports(request, reports, previousNumberOfReports);
+
             _reportRepository.Save(report);
 
-            int numberOfReports = GetNumberOfReports(request);
             DecideToDisable(request, numberOfReports);
 
-            return new ReportResponse { NumberOfReports = numberOfReports, ReportsDisabledOn = _config.ReportsDisabledOn } ;
+            return new ReportResponse 
+                        { NumberOfReports = numberOfReports, 
+                          ReportsDisabledOn = _config.ReportsDisabledOn,
+                          UserHasReportedBefore = previousNumberOfReports == numberOfReports
+                        };
+        }
+
+        private int NewNumberOfReports(ReportRequest request, List<Report> reports, int previousNumberOfReports)
+        {
+            var userHasReportedBefore = reports.Any(x => x.UserInfoId == request.UserInfoId);
+
+            return userHasReportedBefore ? previousNumberOfReports : previousNumberOfReports + 1;
+        }
+
+        private List<Report> GetValidReports(ReportRequest request)
+        {
+            if( request.AnswerId.HasValue)
+            {
+                return _reportRepository.GetValidReportsByAnswerId(request.AnswerId.Value);
+            }
+
+            return _reportRepository.GetValidReportsByQuestionId(request.QuestionId.Value);
         }
 
         private void DecideToDisable(ReportRequest request, int numberOfReports)
@@ -52,7 +78,6 @@ namespace SurrealistGames.GameLogic.Helpers
 
             if (request.AnswerId.HasValue)
             {
-                numberOfReports = _reportRepository.GetReportsByAnswerId(request.AnswerId.Value).Count;
 
                 if (numberOfReports >= _config.ReportsDisabledOn)
                 {
@@ -61,14 +86,5 @@ namespace SurrealistGames.GameLogic.Helpers
             }
         }
 
-        private int GetNumberOfReports(ReportRequest request)
-        {
-            if (request.QuestionId.HasValue)
-            {
-                return _reportRepository.GetReportsByQuestionId(request.QuestionId.Value).Count;
-            }
-
-            return _reportRepository.GetReportsByAnswerId(request.AnswerId.Value).Count;
-        }
     }
 }

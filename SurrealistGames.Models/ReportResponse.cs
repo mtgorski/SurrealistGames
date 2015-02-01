@@ -11,5 +11,7 @@ namespace SurrealistGames.Models
     {
         public int NumberOfReports { get; set; }
         public int ReportsDisabledOn { get; set; }
+
+        public bool UserHasReportedBefore { get; set; }
     }
 }

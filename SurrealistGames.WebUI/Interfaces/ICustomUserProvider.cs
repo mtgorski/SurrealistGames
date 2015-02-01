@@ -10,6 +10,8 @@ namespace SurrealistGames.WebUI.Interfaces
         bool IsLoggedIn(ApiController controller);
 
         string GetAspId(Controller controller);
+
+        string GetAspId(ApiController controller);
     }
 
 

@@ -31,7 +31,10 @@ namespace GameLogic.Tests.cs
         public void SetUp()
         {
             GivenReportRequest = new ReportRequest();
-            ExpectedReport = new Report();
+            ExpectedReport = new Report()
+            {
+                UserInfoId = GivenReportRequest.UserInfoId
+            };
 
             MappingEngineMock = new Mock<IMappingEngine>();
             MappingEngineMock.Setup(
@@ -54,14 +57,19 @@ namespace GameLogic.Tests.cs
 
         private void SetUpPreexistingReportsOnQuestion(int questionId, int numberOfReports)
         {
+            SetUpPreexistingReportsOnQuestion(questionId, numberOfReports, Enumerable.Repeat(-1, numberOfReports).ToList());
+        }
+
+        private void SetUpPreexistingReportsOnQuestion(int questionId, int numberOfReports, List<int> reportingUserIds)
+        {
             var reportsOnGivenQuestion = new List<Report>();
 
             for (int i = 0; i < numberOfReports; i++)
             {
-                reportsOnGivenQuestion.Add(new Report());
+                reportsOnGivenQuestion.Add(new Report() { UserInfoId = reportingUserIds[i] });
             }
 
-            ReportRepositoryMock.Setup(m => m.GetReportsByQuestionId(questionId))
+            ReportRepositoryMock.Setup(m => m.GetValidReportsByQuestionId(questionId))
                     .Returns(reportsOnGivenQuestion);
 
             ReportRepositoryMock.Setup(m => m.Save(It.Is<Report>(r => r == ExpectedReport)))
@@ -70,14 +78,19 @@ namespace GameLogic.Tests.cs
 
         private void SetUpPreexistingReportsOnAnswer(int answerId, int numberOfReports)
         {
+            SetUpPreexistingReportsOnAnswer(answerId, numberOfReports, Enumerable.Repeat(-1, numberOfReports).ToList());
+        }
+
+        private void SetUpPreexistingReportsOnAnswer(int answerId, int numberOfReports, List<int> reportingUserIds)
+        {
             var reportsOnGivenAnswer = new List<Report>();
 
             for (int i = 0; i < numberOfReports; i++)
             {
-                reportsOnGivenAnswer.Add(new Report());
+                reportsOnGivenAnswer.Add(new Report() { UserInfoId = reportingUserIds[i] });
             }
 
-            ReportRepositoryMock.Setup(m => m.GetReportsByAnswerId(answerId))
+            ReportRepositoryMock.Setup(m => m.GetValidReportsByAnswerId(answerId))
                     .Returns(reportsOnGivenAnswer);
 
             ReportRepositoryMock.Setup(m => m.Save(It.Is<Report>(r => r == ExpectedReport)))
@@ -182,6 +195,34 @@ namespace GameLogic.Tests.cs
             var actualResponse = Target.MakeReport(GivenReportRequest);
 
             Assert.AreEqual(18, actualResponse.ReportsDisabledOn);
+        }
+
+        [Test]
+        public void GivenReportRequestOnQuestionAndUserHasReportedBefore_WhenMakeReport_SignalThatTheUserHasReportedBefore()
+        {
+            SetUpPreexistingReportsOnQuestion(questionId: 10, numberOfReports: 4, 
+                reportingUserIds: new List<int> { 101, 44, 66, 5 });
+
+            GivenReportRequest.QuestionId = 10;
+            GivenReportRequest.UserInfoId = 5;
+
+            var actualResponse = Target.MakeReport(GivenReportRequest);
+
+            Assert.IsTrue(actualResponse.UserHasReportedBefore);
+        }
+
+        [Test]
+        public void GivenReportRequestOnQuestionAndUserHasNotReportedBefore_WhenMakeReport_SignalThatUserHasNotReportedBefore()
+        {
+            SetUpPreexistingReportsOnQuestion(questionId: 10, numberOfReports: 4,
+                reportingUserIds: new List<int> { 101, 44, 66, 102 });
+
+            GivenReportRequest.QuestionId = 10;
+            GivenReportRequest.UserInfoId = 5;
+
+            var actualResponse = Target.MakeReport(GivenReportRequest);
+
+            Assert.IsFalse(actualResponse.UserHasReportedBefore);
         }
     }
 }

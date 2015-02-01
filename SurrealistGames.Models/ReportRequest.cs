@@ -11,5 +11,7 @@ namespace SurrealistGames.Models
         public int? QuestionId { get; set; }
 
         public int? AnswerId { get; set; }
+
+        public int UserInfoId { get; set; }
     }
 }

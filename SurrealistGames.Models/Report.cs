@@ -8,5 +8,6 @@ namespace SurrealistGames.Models
 {
     public class Report
     {
+        public int UserInfoId {get; set;}
     }
 }

@@ -25,5 +25,11 @@ namespace SurrealistGames.WebUI.Utility
         {
             return controller.User.Identity.IsAuthenticated;
         }
+
+
+        public string GetAspId(ApiController controller)
+        {
+            return controller.User.Identity.GetUserId();
+        }
     }
 }

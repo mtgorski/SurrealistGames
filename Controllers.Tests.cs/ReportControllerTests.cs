@@ -14,20 +14,46 @@ using System.Reflection;
 using System.Web.Http;
 using SurrealistGames.GameLogic.Helpers;
 using SurrealistGames.GameLogic.Helpers.Interfaces;
+using SurrealistGames.Models.Interfaces;
 
 namespace Controllers.Tests.cs
 {
     [TestFixture]
     class ReportControllerTests
     {
+        public ReportApiController Target { get; set; }
+        public Mock<IReportHelper> ReportHelperMock { get; set; }
+        public Mock<IUserUtility> UserUtilityMock { get; set; }
+        public Mock<IUserInfoRepo> UserInfoRepoMock { get; set; }
+
+        public ReportRequest GivenReportRequest { get; set; }
+        public ReportResponse ExpectedReportResponse { get; set; }
+
+        [SetUp]
+        public void SetUp()
+        {
+            ReportHelperMock = new Mock<IReportHelper>();
+            UserUtilityMock = new Mock<IUserUtility>();
+            UserInfoRepoMock = new Mock<IUserInfoRepo>();
+            ExpectedReportResponse = new ReportResponse();
+            GivenReportRequest = new ReportRequest();
+
+            Target = new ReportApiController(ReportHelperMock.Object, UserUtilityMock.Object,
+                UserInfoRepoMock.Object);
+        }
+
+        private void SetUpUser(int userId)
+        {
+            UserUtilityMock.Setup(m => m.GetAspId(It.IsAny<ReportApiController>()))
+                .Returns("aspId");
+            UserInfoRepoMock.Setup(m => m.GetByAspId(It.Is<string>(s => s == "aspId")))
+                .Returns(new UserInfo() { Id = "aspId", UserInfoId = userId });
+        }
 
         [Test]
         public void ReportApiController_HasAuthorizeAttribute()
         {
-            var mockReportHelper = new Mock<IReportHelper>();
-            var target = new ReportApiController(mockReportHelper.Object);
-
-            Func<ReportRequest, ReportResponse> func = target.Post;
+            Func<ReportRequest, ReportResponse> func = Target.Post;
 
             var attribute = func.Method.GetCustomAttribute(typeof(AuthorizeAttribute));
             Assert.IsNotNull(attribute);
@@ -36,16 +62,24 @@ namespace Controllers.Tests.cs
         [Test]
         public void GivenReportRequest_WhenPost_ReturnResultOfReportHelper()
         {
-            var mockReportHelper = new Mock<IReportHelper>();
-            var expectedResponse = new ReportResponse();
-            var givenReportRequest = new ReportRequest();
-            mockReportHelper.Setup(m => m.MakeReport(It.Is<ReportRequest>(r => r == givenReportRequest)))
-                .Returns(expectedResponse);
-            var target = new ReportApiController(mockReportHelper.Object);
+            SetUpUser(19);
 
-            var actualResponse = target.Post(givenReportRequest);
+            ReportHelperMock.Setup(m => m.MakeReport(It.Is<ReportRequest>(r => r == GivenReportRequest)))
+                .Returns(ExpectedReportResponse);
 
-            Assert.AreSame(expectedResponse, actualResponse);
+            var actualResponse = Target.Post(GivenReportRequest);
+
+            Assert.AreSame(ExpectedReportResponse, actualResponse);
+        }
+
+        [Test]
+        public void GivenReportRequest_WhenPost_SetUserIdOfReport()
+        {
+            SetUpUser(19);
+
+            var response = Target.Post(GivenReportRequest);
+
+            ReportHelperMock.Verify(m => m.MakeReport(It.Is<ReportRequest>(r => r.UserInfoId == 19)));
         }
     
     }

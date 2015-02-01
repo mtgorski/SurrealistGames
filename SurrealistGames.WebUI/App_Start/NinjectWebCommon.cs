@@ -10,6 +10,7 @@ using SurrealistGames.Utility;
 using SurrealistGames.WebUI.Interfaces;
 using SurrealistGames.WebUI.Models;
 using SurrealistGames.WebUI.Utility;
+using AutoMapper;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(SurrealistGames.WebUI.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(SurrealistGames.WebUI.App_Start.NinjectWebCommon), "Stop")]
@@ -23,6 +24,7 @@ namespace SurrealistGames.WebUI.App_Start
 
     using Ninject;
     using Ninject.Web.Common;
+    using SurrealistGames.GameLogic.AutoMapper;
 
     public static class NinjectWebCommon 
     {
@@ -85,6 +87,8 @@ namespace SurrealistGames.WebUI.App_Start
             kernel.Bind<IUserUtility>().To<UserUtility>();
             kernel.Bind<ISavedQuestionGameResultRepo>().To<EfSavedQuestionGameResultRepository>();
 
+            AutoMapperConfiguration.Register();
+            kernel.Bind<IMappingEngine>().ToConstant(Mapper.Engine);
         }        
     }
 }

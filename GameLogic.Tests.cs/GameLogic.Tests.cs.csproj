@@ -81,6 +81,7 @@
     <Compile Include="AnswerValidator.Tests.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="IGameOutcomeRepository.Tests.cs" />
+    <Compile Include="IntegrationTests\ReportHelperIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionFormatter.Tests.cs" />
     <Compile Include="QuestionValidator.Tests.cs" />
