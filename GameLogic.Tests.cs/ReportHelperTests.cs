@@ -69,7 +69,7 @@ namespace GameLogic.Tests.cs
                 reportsOnGivenQuestion.Add(new Report() { UserInfoId = reportingUserIds[i] });
             }
 
-            ReportRepositoryMock.Setup(m => m.GetValidReportsByQuestionId(questionId))
+            ReportRepositoryMock.Setup(m => m.GetReportsByQuestionId(questionId))
                     .Returns(reportsOnGivenQuestion);
 
             ReportRepositoryMock.Setup(m => m.Save(It.Is<Report>(r => r == ExpectedReport)))
@@ -90,7 +90,7 @@ namespace GameLogic.Tests.cs
                 reportsOnGivenAnswer.Add(new Report() { UserInfoId = reportingUserIds[i] });
             }
 
-            ReportRepositoryMock.Setup(m => m.GetValidReportsByAnswerId(answerId))
+            ReportRepositoryMock.Setup(m => m.GetReportsByAnswerId(answerId))
                     .Returns(reportsOnGivenAnswer);
 
             ReportRepositoryMock.Setup(m => m.Save(It.Is<Report>(r => r == ExpectedReport)))
@@ -102,7 +102,7 @@ namespace GameLogic.Tests.cs
         {
             ConfigurationMock.Setup(m => m.ReportsDisabledOn).Returns(5);
             GivenReportRequest.AnswerId = 5;
-            SetUpPreexistingReportsOnAnswer(answerId: 5, numberOfReports: 2);
+            SetUpPreexistingReportsOnAnswer(answerId: 5, numberOfReports: 2, reportingUserIds: new List<int> { 1, 2});
 
             Target.MakeReport(GivenReportRequest);
 
@@ -117,7 +117,7 @@ namespace GameLogic.Tests.cs
 
             GivenReportRequest.QuestionId = 10;
 
-            SetUpPreexistingReportsOnQuestion(questionId:10, numberOfReports:4);
+            SetUpPreexistingReportsOnQuestion(questionId:10, numberOfReports:4, reportingUserIds: new List<int>{1, 2, 3, 4});
 
             QuestionRepositoryMock.Setup(m => m.Disable(It.IsAny<int>()));
 
@@ -133,7 +133,7 @@ namespace GameLogic.Tests.cs
 
             GivenReportRequest.QuestionId = 10;
 
-            SetUpPreexistingReportsOnQuestion(questionId: 10, numberOfReports: 3);
+            SetUpPreexistingReportsOnQuestion(questionId: 10, numberOfReports: 3, reportingUserIds: new List<int> {1, 2, 3});
 
             QuestionRepositoryMock.Setup(m => m.Disable(It.IsAny<int>()));
 
@@ -149,7 +149,7 @@ namespace GameLogic.Tests.cs
 
             GivenReportRequest.AnswerId = 10;
 
-            SetUpPreexistingReportsOnAnswer(answerId: 10, numberOfReports: 4);
+            SetUpPreexistingReportsOnAnswer(answerId: 10, numberOfReports: 4, reportingUserIds: new List<int>{ 1, 2, 3, 4});
 
             AnswerRepositoryMock.Setup(m => m.Disable(It.IsAny<int>()));
 
@@ -165,7 +165,7 @@ namespace GameLogic.Tests.cs
 
             GivenReportRequest.AnswerId = 10;
 
-            SetUpPreexistingReportsOnAnswer(answerId: 10, numberOfReports: 3);
+            SetUpPreexistingReportsOnAnswer(answerId: 10, numberOfReports: 3, reportingUserIds:new List<int>{1, 2, 3});
 
             AnswerRepositoryMock.Setup(m => m.Disable(It.IsAny<int>()));
 
@@ -178,7 +178,7 @@ namespace GameLogic.Tests.cs
         public void GivenReportRequestOnQuestion_WhenMakeReport_ReturnResultingNumberOfReports()
         {
             GivenReportRequest.QuestionId = 10;
-            SetUpPreexistingReportsOnQuestion(questionId: 10, numberOfReports: 7);
+            SetUpPreexistingReportsOnQuestion(questionId: 10, numberOfReports: 7, reportingUserIds: new List<int> {1, 2, 3, 4, 5, 6, 7});
 
             var actualResponse = Target.MakeReport(GivenReportRequest);
 
@@ -190,7 +190,7 @@ namespace GameLogic.Tests.cs
         {
             ConfigurationMock.Setup(m => m.ReportsDisabledOn).Returns(18);
             GivenReportRequest.QuestionId = 10;
-            SetUpPreexistingReportsOnQuestion(questionId: 10, numberOfReports: 7);
+            SetUpPreexistingReportsOnQuestion(questionId: 10, numberOfReports: 7, reportingUserIds: new List<int> { 1, 2, 3, 4, 5, 6, 7});
 
             var actualResponse = Target.MakeReport(GivenReportRequest);
 
@@ -223,6 +223,18 @@ namespace GameLogic.Tests.cs
             var actualResponse = Target.MakeReport(GivenReportRequest);
 
             Assert.IsFalse(actualResponse.UserHasReportedBefore);
+        }
+
+        [Test]
+        public void Given5ReportsWith3DistinctUsersAnd5MaxReports_WhenMakeReport_DoNotDisable()
+        {
+            SetUpPreexistingReportsOnQuestion(questionId: 10, numberOfReports: 5, reportingUserIds: new List<int> { 5, 5, 2, 2, 9 });
+            ConfigurationMock.Setup(m => m.ReportsDisabledOn).Returns(5);
+            GivenReportRequest.QuestionId = 10;
+
+            Target.MakeReport(GivenReportRequest);
+
+            QuestionRepositoryMock.Verify(m => m.Disable(It.IsAny<int>()), Times.Never);
         }
     }
 }

@@ -9,6 +9,6 @@ namespace SurrealistGames.GameLogic.Helpers.Interfaces
 {
     public interface IReportHelper
     {
-        ReportResponse MakeReport(ReportRequest request); 
+        ReportResponse MakeReport(ReportRequest request);
     }
 }

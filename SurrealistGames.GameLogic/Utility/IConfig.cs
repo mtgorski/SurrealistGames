@@ -8,6 +8,6 @@ namespace SurrealistGames.GameLogic.Utility
 {
     public interface IConfig
     {
-        int ReportsDisabledOn { get; set; }
+        int ReportsDisabledOn { get; }
     }
 }

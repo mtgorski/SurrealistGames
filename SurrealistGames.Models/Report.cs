@@ -8,6 +8,14 @@ namespace SurrealistGames.Models
 {
     public class Report
     {
+        public int ReportId { get; set; }
+
         public int UserInfoId {get; set;}
+
+        public int? QuestionId { get; set; }
+
+        public int? AnswerId { get; set; }
+
+        public DateTime SubmittedOn { get; set; }
     }
 }

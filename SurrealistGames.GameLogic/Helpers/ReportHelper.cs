@@ -33,8 +33,8 @@ namespace SurrealistGames.GameLogic.Helpers
         {
             var report = _mapper.Map<ReportRequest, Report>(request);
 
-            var reports = GetValidReports(request);
-            var previousNumberOfReports = reports.Count;
+            var reports = GetPreviousReports(request);
+            var previousNumberOfReports = reports.Distinct(new ReportComparer()).Count(); 
 
             var numberOfReports = NewNumberOfReports(request, reports, previousNumberOfReports);
 
@@ -56,14 +56,14 @@ namespace SurrealistGames.GameLogic.Helpers
             return userHasReportedBefore ? previousNumberOfReports : previousNumberOfReports + 1;
         }
 
-        private List<Report> GetValidReports(ReportRequest request)
+        private List<Report> GetPreviousReports(ReportRequest request)
         {
             if( request.AnswerId.HasValue)
             {
-                return _reportRepository.GetValidReportsByAnswerId(request.AnswerId.Value);
+                return _reportRepository.GetReportsByAnswerId(request.AnswerId.Value);
             }
 
-            return _reportRepository.GetValidReportsByQuestionId(request.QuestionId.Value);
+            return _reportRepository.GetReportsByQuestionId(request.QuestionId.Value);
         }
 
         private void DecideToDisable(ReportRequest request, int numberOfReports)
@@ -83,6 +83,20 @@ namespace SurrealistGames.GameLogic.Helpers
                 {
                     _answerRepository.Disable(request.AnswerId.Value);
                 }
+            }
+        }
+
+        private class ReportComparer : IEqualityComparer<Report>
+        {
+
+            public bool Equals(Report x, Report y)
+            {
+                return x.UserInfoId == y.UserInfoId;
+            }
+
+            public int GetHashCode(Report obj)
+            {
+                return 1;
             }
         }
 

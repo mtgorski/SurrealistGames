@@ -129,22 +129,19 @@ create table Question
 	[QuestionContent] varchar(300) not null
 )
 
-create table QuestionReport
-(
-	[QuestionReportID] [int] identity(1, 1) primary key,
-	[QuestionID] [int] not null
-)
-
-create table AnswerReport
-(
-	[AnswerReportID] [int] identity(1, 1) primary key,
-	[AnswerID] [int] not null
-)
-
 create table Answer
 (
 	[AnswerID] [int] identity(1, 1) primary key,
 	[AnswerContent] varchar(300) not null
+)
+
+create table Report
+(
+	[ReportID] [int] identity(1, 1) primary key,
+	[QuestionID] [int] null,
+	[AnswerID] [int] null,
+	[UserInfoId] [int] not null,
+	[SubmittedOn] [datetime] default getdate()
 )
 
 create table RandomQuestion
@@ -173,13 +170,17 @@ create table SavedQuestionGameResult
 	[UserInfoId] int not null
 )
 
-alter table QuestionReport
-	add constraint FK_QuestionReport_Question foreign key (QuestionID)
+alter table Report
+	add constraint FK_Report_QuestionID_Question_QuestionID foreign key (QuestionID)
 	references Question (QuestionID)
 
-alter table AnswerReport
-	add constraint FK_AnswerReport_Answer foreign key (AnswerID)
+alter table Report
+	add constraint FK_Report_AnswerID_Answer_AnswerID foreign key (AnswerID)
 	references Answer (AnswerID)
+
+alter table Report
+	add constraint FK_Report_UserId_User_UserID foreign key (UserInfoId)
+	references UserInfo (UserInfoId)
 
 alter table UserInfo
 	add constraint FK_UserInfo_AspNetUsers foreign key (Id)

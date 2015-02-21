@@ -10,19 +10,15 @@ namespace SurrealistGames.Models.Interfaces
     {
         void Save(Report report);
         /// <summary>
-        /// Valid reports include only a single report per user and do not
-        /// include reports from users who are not allowed to report. 
         /// </summary>
         /// <param name="questionId"></param>
         /// <returns></returns>
-        List<Report> GetValidReportsByQuestionId(int questionId);
+        List<Report> GetReportsByQuestionId(int questionId);
 
         /// <summary>
-        /// Valid reports include only a single report per user and do not
-        /// include reports from users who are not allowed to report. 
         /// </summary>
         /// <param name="answerId"></param>
         /// <returns></returns>
-        List<Report> GetValidReportsByAnswerId(int answerId);
+        List<Report> GetReportsByAnswerId(int answerId);
     }
 }

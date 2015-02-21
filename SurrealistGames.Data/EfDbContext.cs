@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 
 namespace SurrealistGames.Data
 {
-    public class EfDbContext : DbContext
+    public class EfDbContext : DbContext, SurrealistGames.Data.IEfDbContext
     {
-        public DbSet<UserInfo> UserInfos { get; set; }
-        public DbSet<SavedQuestionGameResult> UserSavedOutcomes { get; set; }
-        public DbSet<Question> Questiones { get; set; }
-        public DbSet<Answer> Answeres { get; set; }
+        public virtual DbSet<UserInfo> UserInfos { get; set; }
+        public virtual DbSet<SavedQuestionGameResult> UserSavedOutcomes { get; set; }
+        public virtual DbSet<Question> Questions { get; set; }
+        public virtual DbSet<Answer> Answers { get; set; }
+        public virtual DbSet<Report> Reports { get; set; }
 
         public EfDbContext() : base(Settings.GetConnectionString())
         {
@@ -35,6 +36,8 @@ namespace SurrealistGames.Data
             modelBuilder.Entity<Question>().ToTable("dbo.Question");
 
             modelBuilder.Entity<Answer>().ToTable("dbo.Answer");
+
+            modelBuilder.Entity<Report>().ToTable("dbo.Report");
         }
     }
 }

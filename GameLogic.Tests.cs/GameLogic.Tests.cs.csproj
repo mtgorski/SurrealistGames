@@ -36,6 +36,19 @@
     <Reference Include="AutoMapper.Net4">
       <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.Testing">
+      <HintPath>..\packages\EntityFrameworkTesting.1.1.0\lib\net45\EntityFramework.Testing.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.Testing.Moq">
+      <HintPath>..\packages\EntityFrameworkTesting.Moq.1.1.0\lib\net45\EntityFramework.Testing.Moq.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -65,6 +78,7 @@
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -80,6 +94,7 @@
     <Compile Include="AnswerFormatter.Tests.cs" />
     <Compile Include="AnswerValidator.Tests.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
+    <Compile Include="EfReportRepositoryTests.cs" />
     <Compile Include="IGameOutcomeRepository.Tests.cs" />
     <Compile Include="IntegrationTests\ReportHelperIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

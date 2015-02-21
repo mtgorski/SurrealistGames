@@ -47,7 +47,13 @@ namespace SurrealistGames.Data
 
         public void Disable(int answerId)
         {
-            throw new NotImplementedException();
+            using (var db = new EfDbContext())
+            {
+                db.Database.ExecuteSqlCommand("delete from dbo.RandomAnswer where AnswerID = @answerId",
+                    new SqlParameter("@answerId", answerId));
+
+                db.Database.ExecuteSqlCommand("exec dbo.RandomAnswer_ResetIDsAfterDelete");
+            }
         }
     }
 }
