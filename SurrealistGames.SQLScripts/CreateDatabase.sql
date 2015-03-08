@@ -126,13 +126,21 @@ GO
 create table Question
 (
 	[QuestionID] [int] identity(1, 1) primary key,
-	[QuestionContent] varchar(300) not null
+	[QuestionContent] varchar(300) not null,
+	[ApprovingUserId] int null,
+	[ApprovedOn] datetime null,
+	[RemovingUserId] int null,
+	[RemovedOn] datetime null
 )
 
 create table Answer
 (
 	[AnswerID] [int] identity(1, 1) primary key,
-	[AnswerContent] varchar(300) not null
+	[AnswerContent] varchar(300) not null,
+	[ApprovingUserId] int null,
+	[ApprovedOn] datetime null,
+	[RemovingUserId] int null,
+	[RemovedOn] datetime null
 )
 
 create table Report
@@ -169,6 +177,22 @@ create table SavedQuestionGameResult
 	[AnswerId] int not null,
 	[UserInfoId] int not null
 )
+
+alter table Question
+	add constraint FK_Question_ApprovingUserId_UserInfo_UserInfoId foreign key (ApprovingUserId)
+	references UserInfo (UserInfoId)
+
+alter table Question
+	add constraint FK_Question_RemovingUserId_UserInfo_UserInfoId foreign key (RemovingUserId)
+	references UserInfo (UserInfoId)
+
+alter table Answer
+	add constraint FK_Answer_ApprovingUserId_UserInfo_UserInfoId foreign key (ApprovingUserId)
+	references UserInfo (UserInfoId)
+
+alter table Answer
+	add constraint FK_Answer_RemovingUserId_UserInfo_UserInfoId foreign key (RemovingUserId)
+	references UserInfo (UserInfoId)
 
 alter table Report
 	add constraint FK_Report_QuestionID_Question_QuestionID foreign key (QuestionID)
@@ -276,6 +300,13 @@ as
 begin transaction
 	insert into UserInfo(Id)
 	values (@Id)
+
+	INSERT INTO [dbo].[AspNetUserRoles]
+           ([UserId]
+           ,[RoleId])
+     VALUES
+           (@Id
+           ,'3') --automatically grant Report Role
 commit transaction
 go
 
@@ -375,6 +406,14 @@ go
 use SurrealistGames
 go
 
+INSERT INTO [dbo].[AspNetRoles]
+           ([Id]
+           ,[Name])
+     VALUES
+           ('1'
+           ,'Admin'), ('2', 'Moderator'), ('3', 'Reporter')
+GO
+
 insert into Question(QuestionContent)
 values 
 		('What is the meaning of life?'),
@@ -410,16 +449,33 @@ values
 		(6, 6);
 
 
-insert into AspNetUsers (Id, Email, EmailConfirmed,
-						 PasswordHash, SecurityStamp, UserName,
-						  PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnabled,
-						  AccessFailedCount)
-values ('99ba7c1f-9091-443a-a9d1-78c0ac54b357', 'matt@example.com', 0, 
-		'AHeA2/V7ZzW86cmaitaBcGbGGk8/wsg+jNsGEXOLXAqr//t/u9ToBgBehsrk4fEFUA==',
-		'26812078-4361-48e6-befa-e5b371fe9297', 'matt@example.com', 0, 0, 0, 0)
+INSERT [dbo].[AspNetUsers] ([Id], [Email], [EmailConfirmed], [PasswordHash], [SecurityStamp], [PhoneNumber], [PhoneNumberConfirmed], [TwoFactorEnabled], [LockoutEndDateUtc], [LockoutEnabled], [AccessFailedCount], [UserName]) VALUES (N'99ba7c1f-9091-443a-a9d1-78c0ac54b357', N'matt@example.com', 0, N'AHeA2/V7ZzW86cmaitaBcGbGGk8/wsg+jNsGEXOLXAqr//t/u9ToBgBehsrk4fEFUA==', N'26812078-4361-48e6-befa-e5b371fe9297', NULL, 0, 0, NULL, 0, 0, N'matt@example.com')
+GO
+INSERT [dbo].[AspNetUsers] ([Id], [Email], [EmailConfirmed], [PasswordHash], [SecurityStamp], [PhoneNumber], [PhoneNumberConfirmed], [TwoFactorEnabled], [LockoutEndDateUtc], [LockoutEnabled], [AccessFailedCount], [UserName]) VALUES (N'c69ab1cd-9eca-4dba-a01f-0e6e015d089e', N'mod@example.com', 0, N'AJKXUVqtImCw1x5Se1ki/ahuE9UjHtisLlm6d0xYhfGe1Il9F5Gg5SPl1UjLZJktWg==', N'62ae739f-34f2-40ba-822f-c26c284aaa84', NULL, 0, 0, NULL, 0, 0, N'mod@example.com')
+GO
+INSERT [dbo].[AspNetUsers] ([Id], [Email], [EmailConfirmed], [PasswordHash], [SecurityStamp], [PhoneNumber], [PhoneNumberConfirmed], [TwoFactorEnabled], [LockoutEndDateUtc], [LockoutEnabled], [AccessFailedCount], [UserName]) VALUES (N'ee9ec536-482c-4a08-8da0-7ffb6538ab1b', N'admin@example.com', 0, N'AJcxBd7DAbPq8mtQlZwQXZjHtNtYpy0thWGPfiTSelykWj8IHh2uB242/PC5HJ0L8Q==', N'05c2dc2b-d599-4402-9d33-a7ea65f47d01', NULL, 0, 0, NULL, 0, 0, N'admin@example.com')
+GO
+INSERT [dbo].[AspNetUserRoles] ([UserId], [RoleId]) VALUES (N'99ba7c1f-9091-443a-a9d1-78c0ac54b357', N'3')
+GO
+INSERT [dbo].[AspNetUserRoles] ([UserId], [RoleId]) VALUES (N'c69ab1cd-9eca-4dba-a01f-0e6e015d089e', N'3')
+GO
+INSERT [dbo].[AspNetUserRoles] ([UserId], [RoleId]) VALUES (N'ee9ec536-482c-4a08-8da0-7ffb6538ab1b', N'3')
+GO
+INSERT [dbo].[AspNetUserRoles] ([UserId], [RoleId]) VALUES (N'c69ab1cd-9eca-4dba-a01f-0e6e015d089e', N'2')
+GO
+INSERT [dbo].[AspNetUserRoles] ([UserId], [RoleId]) VALUES (N'ee9ec536-482c-4a08-8da0-7ffb6538ab1b', N'1')
+GO
+SET IDENTITY_INSERT [dbo].[UserInfo] ON 
 
-insert into UserInfo(Id)
-values ('99ba7c1f-9091-443a-a9d1-78c0ac54b357')
+GO
+INSERT [dbo].[UserInfo] ([UserInfoId], [Id]) VALUES (1, N'99ba7c1f-9091-443a-a9d1-78c0ac54b357')
+GO
+INSERT [dbo].[UserInfo] ([UserInfoId], [Id]) VALUES (2, N'ee9ec536-482c-4a08-8da0-7ffb6538ab1b')
+GO
+INSERT [dbo].[UserInfo] ([UserInfoId], [Id]) VALUES (3, N'c69ab1cd-9eca-4dba-a01f-0e6e015d089e')
+GO
+SET IDENTITY_INSERT [dbo].[UserInfo] OFF
+GO
 
 declare @UserInfoId int
 select @UserInfoId = UserInfoId 
@@ -430,3 +486,4 @@ insert into SavedQuestionGameResult (UserInfoId, QuestionId, AnswerId)
 values (@UserInfoId, 2, 1),
        (@UserInfoId, 5, 3),
        (@UserInfoId, 2, 4)
+

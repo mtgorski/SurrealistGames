@@ -1,6 +1,7 @@
 ﻿using SurrealistGames.Models.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +14,8 @@ namespace SurrealistGames.Data
         {
             using(var db = new EfDbContext())
             {
-                db.UserInfos.Add(item);
-                db.SaveChanges();
+                db.Database.ExecuteSqlCommand("exec UserInfo_Insert @Id",
+                    new SqlParameter("@Id", item.Id));
             }
         }
 

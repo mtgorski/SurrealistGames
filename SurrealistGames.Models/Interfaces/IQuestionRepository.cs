@@ -11,5 +11,7 @@ namespace SurrealistGames.Models.Interfaces
         Question GetRandom();
         void Save(Question prefix);
         void Disable(int questionId);
+        Question GetById(int questionId);
+        ICollection<Question> GetTopReportedAndUnmoderatedContent(int numberOfResults);
     }
 }

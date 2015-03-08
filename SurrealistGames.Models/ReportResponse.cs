@@ -13,5 +13,7 @@ namespace SurrealistGames.Models
         public int ReportsDisabledOn { get; set; }
 
         public bool UserHasReportedBefore { get; set; }
+
+        public bool ContentIsModeratorApproved { get; set; }
     }
 }

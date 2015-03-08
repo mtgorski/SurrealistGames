@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 namespace SurrealistGames.Data
 {
     public interface IEfDbContext
@@ -8,6 +9,7 @@ namespace SurrealistGames.Data
         System.Data.Entity.DbSet<SurrealistGames.Models.Report> Reports { get; set; }
         System.Data.Entity.DbSet<SurrealistGames.Models.UserInfo> UserInfos { get; set; }
         System.Data.Entity.DbSet<SurrealistGames.Models.SavedQuestionGameResult> UserSavedOutcomes { get; set; }
+        Database Database { get; }
         int SaveChanges();
     }
 }

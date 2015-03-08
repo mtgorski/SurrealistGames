@@ -32,5 +32,19 @@ namespace SurrealistGames.WebUI.Controllers
 
             return _reportHelper.MakeReport(reportRequest);
         }
+
+        [Authorize(Roles="Admin, Moderators")]
+        public List<Answer> GetTopUnmoderatedAnswers(int numberOfResults)
+        {
+            return _reportHelper.GetTopReportedAndUnmoderatedContent<Answer>(numberOfResults)
+                                .Cast<Answer>().ToList();
+        }
+
+        [Authorize(Roles="Admin, Moderators")]
+        public List<Question> GetTopUnmoderatedQuestions(int numberOfResults)
+        {
+            return _reportHelper.GetTopReportedAndUnmoderatedContent<Question>(numberOfResults)
+                                .Cast<Question>().ToList();
+        }
     }
 }

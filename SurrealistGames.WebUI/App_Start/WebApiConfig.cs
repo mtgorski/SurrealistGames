@@ -15,6 +15,11 @@ namespace SurrealistGames.WebUI
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
+                name:"CustomApi",
+                routeTemplate: "api/{controller}/{action}"
+                );
+
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }

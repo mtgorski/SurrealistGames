@@ -29,6 +29,7 @@ namespace SurrealistGames.GameLogic.Helpers
             _answerRepository = answerRepository;
         }
 
+        #region MakeReport
         public Models.ReportResponse MakeReport(Models.ReportRequest request)
         {
             var report = _mapper.Map<ReportRequest, Report>(request);
@@ -40,12 +41,18 @@ namespace SurrealistGames.GameLogic.Helpers
 
             _reportRepository.Save(report);
 
-            DecideToDisable(request, numberOfReports);
+            var contentIsModeratorApproved = ContentIsModeratorApproved(request);
+
+            if(!contentIsModeratorApproved)
+            {
+                DecideToDisable(request, numberOfReports);
+            }
 
             return new ReportResponse 
                         { NumberOfReports = numberOfReports, 
                           ReportsDisabledOn = _config.ReportsDisabledOn,
-                          UserHasReportedBefore = previousNumberOfReports == numberOfReports
+                          UserHasReportedBefore = previousNumberOfReports == numberOfReports,
+                          ContentIsModeratorApproved = contentIsModeratorApproved
                         };
         }
 
@@ -64,6 +71,20 @@ namespace SurrealistGames.GameLogic.Helpers
             }
 
             return _reportRepository.GetReportsByQuestionId(request.QuestionId.Value);
+        }
+
+        private bool ContentIsModeratorApproved(ReportRequest request)
+        {
+            if(request.QuestionId.HasValue)
+            {
+                var question = _questionRepository.GetById(request.QuestionId.Value);
+
+                return question.ApprovingUserId.HasValue;
+            }
+
+            var answer = _answerRepository.GetById(request.AnswerId.Value);
+
+            return answer.ApprovingUserId.HasValue;
         }
 
         private void DecideToDisable(ReportRequest request, int numberOfReports)
@@ -99,6 +120,21 @@ namespace SurrealistGames.GameLogic.Helpers
                 return 1;
             }
         }
+        #endregion
 
+        public IEnumerable<IContent> GetTopReportedAndUnmoderatedContent<T>(int numberOfResults) where T : IContent
+        {
+            if(typeof(T) == typeof(Question))
+            {
+                return _questionRepository.GetTopReportedAndUnmoderatedContent(numberOfResults);
+            }
+
+            if(typeof(T) == typeof(Answer))
+            {
+                return _answerRepository.GetTopReportedAndUnmoderatedContent(numberOfResults);
+            }
+
+            throw new ArgumentException(string.Format("{0} is not a supported type.", typeof(T).Name));
+        }
     }
 }

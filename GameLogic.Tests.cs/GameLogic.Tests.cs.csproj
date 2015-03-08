@@ -94,6 +94,7 @@
     <Compile Include="AnswerFormatter.Tests.cs" />
     <Compile Include="AnswerValidator.Tests.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
+    <Compile Include="EfQuestionRepositoryTests.cs" />
     <Compile Include="EfReportRepositoryTests.cs" />
     <Compile Include="IGameOutcomeRepository.Tests.cs" />
     <Compile Include="IntegrationTests\ReportHelperIntegrationTests.cs" />
