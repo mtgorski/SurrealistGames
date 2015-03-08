@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace SurrealistGames.Models.Interfaces
 {
-    public interface IQuestionRepository
+    public interface IQuestionRepository : IContentRepository
     {
         Question GetRandom();
         void Save(Question prefix);
-        void Disable(int questionId);
         Question GetById(int questionId);
-        ICollection<Question> GetTopReportedAndUnmoderatedContent(int numberOfResults);
     }
 }

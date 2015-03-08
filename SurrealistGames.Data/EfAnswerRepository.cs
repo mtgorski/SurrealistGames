@@ -1,4 +1,5 @@
 ﻿using SurrealistGames.Models;
+using SurrealistGames.Models.Abstract;
 using SurrealistGames.Models.Interfaces;
 using SurrealistGames.Utility;
 using System;
@@ -55,8 +56,12 @@ namespace SurrealistGames.Data
             return _context.Answers.FirstOrDefault(a => a.AnswerId == answerId);
         }
 
+        public Content GetContentById(int contentId)
+        {
+            return GetById(contentId);
+        }
 
-        public IEnumerable<Answer> GetTopReportedAndUnmoderatedContent(int numberOfAnswers)
+        public IEnumerable<Content> GetTopReportedAndUnmoderatedContent(int numberOfAnswers)
         {
             return _context.Answers
                         .Where(a => !a.ApprovingUserId.HasValue && !a.RemovingUserId.HasValue)

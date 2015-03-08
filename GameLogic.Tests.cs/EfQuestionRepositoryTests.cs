@@ -107,7 +107,7 @@ namespace GameLogic.Tests.cs
 
             var result = Target.GetTopReportedAndUnmoderatedContent(3);
 
-            Assert.AreEqual(3, result.Count);
+            Assert.AreEqual(3, result.Count());
         }
 
         [Test]
@@ -176,7 +176,7 @@ namespace GameLogic.Tests.cs
             ReportsMock.SetupData<Report>(reports);
             
             var result = Target.GetTopReportedAndUnmoderatedContent(10);
-            var questionIds = result.Select(x => x.QuestionId).ToList();
+            var questionIds = result.Select(x => x.Id).ToList();
 
             CollectionAssert.AreEqual(new List<int> { 3, 2, 1, 4 }, questionIds);
         }

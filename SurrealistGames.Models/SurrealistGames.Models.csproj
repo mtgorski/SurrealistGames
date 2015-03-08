@@ -39,7 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\Content.cs" />
     <Compile Include="Interfaces\IContent.cs" />
+    <Compile Include="Interfaces\IContentRepository.cs" />
     <Compile Include="Interfaces\IReportRepository.cs" />
     <Compile Include="Interfaces\IQuestionRepository.cs" />
     <Compile Include="Interfaces\IAnswerRepository.cs" />

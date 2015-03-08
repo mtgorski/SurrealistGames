@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using Ninject;
+using Ninject.Activation.Caching;
 using Ninject.Modules;
 using Ninject.Web.Common;
 using SurrealistGames.Data;
 using SurrealistGames.GameLogic;
 using SurrealistGames.GameLogic.AutoMapper;
+using SurrealistGames.GameLogic.Factories;
+using SurrealistGames.GameLogic.Factories.Interfaces;
 using SurrealistGames.GameLogic.Helpers;
 using SurrealistGames.GameLogic.Helpers.Interfaces;
 using SurrealistGames.GameLogic.Utility;
@@ -40,7 +43,9 @@ namespace SurrealistGames.WebUI
             Kernel.Bind<IReportRepository>().To<EfReportRepository>().InRequestScope();
             Kernel.Bind<IReportHelper>().To<ReportHelper>();
             Kernel.Bind<IConfig>().To<Config>().InSingletonScope();
-
+            Kernel.Bind<IContentRepositoryFactory>().To<ContentRepositoryFactory>();
+            Kernel.Rebind<IKernel>().ToMethod(_ => Kernel).InSingletonScope();
+    
             AutoMapperConfiguration.Register();
             Kernel.Bind<IMappingEngine>().ToConstant(Mapper.Engine);
         }

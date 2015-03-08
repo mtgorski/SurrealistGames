@@ -38,13 +38,13 @@ namespace SurrealistGames.WebUI.App_Start
 
         public void Dispose()
         {
-            var disposable = this.resolver as IDisposable;
-            if (disposable != null)
-            {
-                disposable.Dispose();
-            }
+            //var disposable = this.resolver as IDisposable;
+            //if (disposable != null)
+            //{
+            //    disposable.Dispose();
+            //}
 
-            this.resolver = null;
+            //this.resolver = null;
         }
 
         public object GetService(Type serviceType)

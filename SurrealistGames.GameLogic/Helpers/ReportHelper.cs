@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using SurrealistGames.GameLogic.Factories.Interfaces;
 using SurrealistGames.GameLogic.Helpers.Interfaces;
 using SurrealistGames.GameLogic.Utility;
 using SurrealistGames.Models;
+using SurrealistGames.Models.Abstract;
 using SurrealistGames.Models.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -16,23 +18,25 @@ namespace SurrealistGames.GameLogic.Helpers
         private readonly IMappingEngine _mapper;
         private readonly IReportRepository _reportRepository;
         private readonly IConfig _config;
-        private readonly IQuestionRepository _questionRepository;
-        private readonly IAnswerRepository _answerRepository;
+        private readonly IContentRepositoryFactory _contentRepositoryFactory;
+
+        private IContentRepository _contentRepository;
         
         public ReportHelper(IMappingEngine mappingEngine, IReportRepository reportRepository, IConfig config,
-            IQuestionRepository questionRepository, IAnswerRepository answerRepository)
+             IContentRepositoryFactory contentRepositoryFactory)
         {
             _mapper = mappingEngine;
             _reportRepository = reportRepository;
             _config = config;
-            _questionRepository = questionRepository;
-            _answerRepository = answerRepository;
+            _contentRepositoryFactory = contentRepositoryFactory;
         }
 
         #region MakeReport
         public Models.ReportResponse MakeReport(Models.ReportRequest request)
         {
             var report = _mapper.Map<ReportRequest, Report>(request);
+
+            _contentRepository = GetContentRepositoryFor(request);
 
             var reports = GetPreviousReports(request);
             var previousNumberOfReports = reports.Distinct(new ReportComparer()).Count(); 
@@ -56,6 +60,16 @@ namespace SurrealistGames.GameLogic.Helpers
                         };
         }
 
+        private IContentRepository GetContentRepositoryFor(ReportRequest request)
+        {
+            if(request.AnswerId.HasValue)
+            {
+                return _contentRepositoryFactory.GetRepositoryFor<Answer>();
+            }
+
+            return _contentRepositoryFactory.GetRepositoryFor<Question>();
+        }
+
         private int NewNumberOfReports(ReportRequest request, List<Report> reports, int previousNumberOfReports)
         {
             var userHasReportedBefore = reports.Any(x => x.UserInfoId == request.UserInfoId);
@@ -75,35 +89,16 @@ namespace SurrealistGames.GameLogic.Helpers
 
         private bool ContentIsModeratorApproved(ReportRequest request)
         {
-            if(request.QuestionId.HasValue)
-            {
-                var question = _questionRepository.GetById(request.QuestionId.Value);
+            var content = _contentRepository.GetContentById(request.ContentId);
 
-                return question.ApprovingUserId.HasValue;
-            }
-
-            var answer = _answerRepository.GetById(request.AnswerId.Value);
-
-            return answer.ApprovingUserId.HasValue;
+            return content.IsApproved;
         }
 
         private void DecideToDisable(ReportRequest request, int numberOfReports)
         {
-            if (request.QuestionId.HasValue)
+            if (numberOfReports >= _config.ReportsDisabledOn)
             {
-                if (numberOfReports >= _config.ReportsDisabledOn)
-                {
-                    _questionRepository.Disable(request.QuestionId.Value);
-                }
-            }
-
-            if (request.AnswerId.HasValue)
-            {
-
-                if (numberOfReports >= _config.ReportsDisabledOn)
-                {
-                    _answerRepository.Disable(request.AnswerId.Value);
-                }
+                _contentRepository.Disable(request.ContentId);
             }
         }
 
@@ -122,19 +117,11 @@ namespace SurrealistGames.GameLogic.Helpers
         }
         #endregion
 
-        public IEnumerable<IContent> GetTopReportedAndUnmoderatedContent<T>(int numberOfResults) where T : IContent
+        public IEnumerable<Content> GetTopReportedAndUnmoderatedContent<T>(int numberOfResults) where T : Content
         {
-            if(typeof(T) == typeof(Question))
-            {
-                return _questionRepository.GetTopReportedAndUnmoderatedContent(numberOfResults);
-            }
+            var repository = _contentRepositoryFactory.GetRepositoryFor<T>();
 
-            if(typeof(T) == typeof(Answer))
-            {
-                return _answerRepository.GetTopReportedAndUnmoderatedContent(numberOfResults);
-            }
-
-            throw new ArgumentException(string.Format("{0} is not a supported type.", typeof(T).Name));
+            return repository.GetTopReportedAndUnmoderatedContent(numberOfResults);
         }
     }
 }

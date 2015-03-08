@@ -1,4 +1,5 @@
 ﻿using SurrealistGames.Models;
+using SurrealistGames.Models.Abstract;
 using SurrealistGames.Models.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,6 @@ namespace SurrealistGames.GameLogic.Helpers.Interfaces
     {
         ReportResponse MakeReport(ReportRequest request);
 
-        IEnumerable<IContent> GetTopReportedAndUnmoderatedContent<T>(int numberOfResults) where T : IContent;
+        IEnumerable<Content> GetTopReportedAndUnmoderatedContent<T>(int numberOfResults) where T : Content;
     }
 }

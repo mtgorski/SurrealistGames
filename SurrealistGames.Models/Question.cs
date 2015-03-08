@@ -1,4 +1,5 @@
-﻿using SurrealistGames.Models.Interfaces;
+﻿using SurrealistGames.Models.Abstract;
+using SurrealistGames.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,15 +7,34 @@ using System.Web;
 
 namespace SurrealistGames.Models
 {
-    public class Question : IContent
+    public class Question : Content, IContent
     {
         public string QuestionContent { get; set; }
         public int QuestionId { get; set; }
-        public int? ApprovingUserId { get; set; }
-        public DateTime? ApprovedOn { get; set; }
-        public int? RemovingUserId { get; set; }
-        public DateTime? RemovedOn { get; set; }
 
-        public virtual ICollection<Report> Reports { get; set; }
+        public override string Value
+        {
+            get
+            {
+                return QuestionContent;
+            }
+            set
+            {
+                QuestionContent = value;
+            }
+        }
+
+        public override int Id
+        {
+            get
+            {
+                return QuestionId;
+            }
+            set
+            {
+               QuestionId = QuestionId;
+            }
+        }
+
     }
 }

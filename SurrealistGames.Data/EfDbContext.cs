@@ -2,6 +2,7 @@
 using SurrealistGames.Repositories;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
@@ -33,9 +34,15 @@ namespace SurrealistGames.Data
 
             modelBuilder.Entity<UserInfo>().ToTable("dbo.UserInfo");
 
-            modelBuilder.Entity<Question>().ToTable("dbo.Question");
+            modelBuilder.Entity<Question>().ToTable("dbo.Question")
+                .Ignore(e => e.Id)
+                .Ignore(e => e.Value)
+                .Ignore(e => e.IsApproved);
 
-            modelBuilder.Entity<Answer>().ToTable("dbo.Answer");
+            modelBuilder.Entity<Answer>().ToTable("dbo.Answer")
+                .Ignore(e => e.Id)
+                .Ignore(e => e.Value)
+                .Ignore(e => e.IsApproved);
 
             modelBuilder.Entity<Report>().ToTable("dbo.Report");
         }

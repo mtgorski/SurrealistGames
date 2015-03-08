@@ -1,5 +1,6 @@
 ﻿using SurrealistGames.GameLogic.Helpers.Interfaces;
 using SurrealistGames.Models;
+using SurrealistGames.Models.Abstract;
 using SurrealistGames.Models.Interfaces;
 using SurrealistGames.WebUI.Interfaces;
 using System;
@@ -34,17 +35,17 @@ namespace SurrealistGames.WebUI.Controllers
         }
 
         [Authorize(Roles="Admin, Moderators")]
-        public List<Answer> GetTopUnmoderatedAnswers(int numberOfResults)
+        public List<Content> GetTopUnmoderatedAnswers(int numberOfResults)
         {
             return _reportHelper.GetTopReportedAndUnmoderatedContent<Answer>(numberOfResults)
-                                .Cast<Answer>().ToList();
+                                .ToList();
         }
 
         [Authorize(Roles="Admin, Moderators")]
-        public List<Question> GetTopUnmoderatedQuestions(int numberOfResults)
+        public List<Content> GetTopUnmoderatedQuestions(int numberOfResults)
         {
             return _reportHelper.GetTopReportedAndUnmoderatedContent<Question>(numberOfResults)
-                                .Cast<Question>().ToList();
+                                .ToList();
         }
     }
 }

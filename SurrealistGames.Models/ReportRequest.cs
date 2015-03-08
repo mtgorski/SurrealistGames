@@ -13,5 +13,15 @@ namespace SurrealistGames.Models
         public int? AnswerId { get; set; }
 
         public int UserInfoId { get; set; }
+
+        public int ContentId
+        {
+            get
+            {
+                return QuestionId.HasValue ? QuestionId.Value
+                    : AnswerId.Value;
+            }
+        }
+
     }
 }

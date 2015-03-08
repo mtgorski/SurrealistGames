@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Moq;
 using NUnit.Framework;
+using SurrealistGames.GameLogic.Factories.Interfaces;
 using SurrealistGames.GameLogic.Helpers;
 using SurrealistGames.GameLogic.Utility;
 using SurrealistGames.Models;
+using SurrealistGames.Models.Abstract;
 using SurrealistGames.Models.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -21,7 +23,8 @@ namespace GameLogic.Tests.cs
         public Mock<IReportRepository> ReportRepositoryMock { get; set; }
         public Mock<IAnswerRepository> AnswerRepositoryMock { get; set; }
         public Mock<IQuestionRepository> QuestionRepositoryMock { get; set; }
-
+        public Mock<IContentRepositoryFactory> ContentRepositoryFactoryMock { get; set; }
+        
         public ReportRequest GivenReportRequest { get; set; }
         public Report ExpectedReport { get; set; }
 
@@ -51,14 +54,19 @@ namespace GameLogic.Tests.cs
             ReportRepositoryMock = new Mock<IReportRepository>();
             AnswerRepositoryMock = new Mock<IAnswerRepository>();
             QuestionRepositoryMock = new Mock<IQuestionRepository>();
+            ContentRepositoryFactoryMock = new Mock<IContentRepositoryFactory>();
+
+            ContentRepositoryFactoryMock.Setup(m => m.GetRepositoryFor<Answer>())
+                .Returns(AnswerRepositoryMock.Object);
+            ContentRepositoryFactoryMock.Setup(m => m.GetRepositoryFor<Question>())
+                .Returns(QuestionRepositoryMock.Object);
 
             ConfigurationMock = new Mock<IConfig>();
 
             Target = new ReportHelper(MappingEngineMock.Object,
                                        ReportRepositoryMock.Object, 
-                                       ConfigurationMock.Object,
-                                       QuestionRepositoryMock.Object,
-                                       AnswerRepositoryMock.Object);
+                                       ConfigurationMock.Object, 
+                                       ContentRepositoryFactoryMock.Object);
         }
 
         #region MakeReport Setup Methods
@@ -94,6 +102,8 @@ namespace GameLogic.Tests.cs
 
             QuestionRepositoryMock.Setup(m => m.GetById(It.Is<int>(id => id == GivenReportRequest.QuestionId.Value)))
                 .Returns(ReportedQuestion);
+            QuestionRepositoryMock.Setup(m => m.GetContentById(It.Is<int>(id => id == GivenReportRequest.QuestionId.Value)))
+                .Returns(ReportedQuestion);
 
             ReportedQuestion.QuestionId = GivenReportRequest.QuestionId.Value;
         }
@@ -119,6 +129,8 @@ namespace GameLogic.Tests.cs
                 .Callback(() => reportsOnGivenAnswer.Add(ExpectedReport));
 
             AnswerRepositoryMock.Setup(m => m.GetById(It.Is<int>(id => id == GivenReportRequest.AnswerId.Value)))
+                .Returns(ReportedAnswer);
+            AnswerRepositoryMock.Setup(m => m.GetContentById(It.Is<int>(id => id == GivenReportRequest.AnswerId.Value)))
                 .Returns(ReportedAnswer);
 
             ReportedAnswer.AnswerId = GivenReportRequest.AnswerId.Value;
@@ -306,7 +318,7 @@ namespace GameLogic.Tests.cs
         #endregion
 
         [Test]
-        public void GivenViewReportsRequestForQuestions_WhenGetTopReportedContent_DelegateToQuestionRepository()
+        public void GivenViewReportsRequestForQuestions_WhenGetTopReportedContent_DelegateToContentRepository()
         {
             QuestionRepositoryMock.Setup(m => m.GetTopReportedAndUnmoderatedContent(It.Is<int>(n => n == 10)))
                 .Returns(new List<Question>());
