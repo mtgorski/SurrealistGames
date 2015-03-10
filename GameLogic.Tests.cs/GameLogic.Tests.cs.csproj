@@ -97,6 +97,7 @@
     <Compile Include="EfQuestionRepositoryTests.cs" />
     <Compile Include="EfReportRepositoryTests.cs" />
     <Compile Include="IGameOutcomeRepository.Tests.cs" />
+    <Compile Include="ModerationHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionFormatter.Tests.cs" />
     <Compile Include="QuestionValidator.Tests.cs" />

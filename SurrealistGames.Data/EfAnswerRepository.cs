@@ -69,5 +69,14 @@ namespace SurrealistGames.Data
                         .Take(numberOfAnswers)
                         .ToList();
         }
+
+
+        public void Remove(RemoveContentRequest request)
+        {
+            var answer = _context.Answers.First(r => r.AnswerId == request.AnswerId);
+            answer.RemovedOn = DateTime.UtcNow;
+            answer.RemovingUserId = request.RequestingUserId;
+            _context.SaveChanges();
+        }
     }
 }

@@ -11,5 +11,6 @@ namespace SurrealistGames.GameLogic.Factories.Interfaces
     public interface IContentRepositoryFactory
     {
         IContentRepository GetRepositoryFor<T>() where T : Content;
+        IContentRepository GetRepositoryFor(Type type);
     }
 }

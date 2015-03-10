@@ -74,7 +74,9 @@
     <Compile Include="GameLogic\QuestionFormatter.cs" />
     <Compile Include="GameLogic\QuestionGameOutcomeGenerator.cs" />
     <Compile Include="GameLogic\QuestionValidator.cs" />
+    <Compile Include="Helpers\Interfaces\IModerationHelper.cs" />
     <Compile Include="Helpers\Interfaces\IReportHelper.cs" />
+    <Compile Include="Helpers\ModerationHelper.cs" />
     <Compile Include="Helpers\ReportHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\Config.cs" />

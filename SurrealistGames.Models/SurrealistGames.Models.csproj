@@ -51,6 +51,8 @@
     <Compile Include="QuestionGameOutcome.cs" />
     <Compile Include="Question.cs" />
     <Compile Include="Answer.cs" />
+    <Compile Include="RemoveContentRequest.cs" />
+    <Compile Include="RemoveContentResponse.cs" />
     <Compile Include="Report.cs" />
     <Compile Include="ReportRequest.cs" />
     <Compile Include="ReportResponse.cs" />

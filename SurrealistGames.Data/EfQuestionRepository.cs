@@ -48,15 +48,12 @@ namespace SurrealistGames.Data
 
         }
 
-
         public void Disable(int questionId)
         {
-
             _context.Database.ExecuteSqlCommand("delete from dbo.RandomQuestion where QuestionID = @questionId",
                 new SqlParameter("@QuestionID", questionId));
 
             _context.Database.ExecuteSqlCommand("exec dbo.RandomQuestion_ResetIDsAfterDelete");
-
         }
 
         public Models.Question GetById(int questionId)
@@ -76,6 +73,15 @@ namespace SurrealistGames.Data
                         .OrderByDescending(q => q.Reports.Count)
                         .Take(numberOfResults)
                         .ToList();
+        }
+
+
+        public void Remove(RemoveContentRequest request)
+        {
+            var question = _context.Questions.First(r => r.QuestionId == request.QuestionId);
+            question.RemovedOn = DateTime.UtcNow;
+            question.RemovingUserId = request.RequestingUserId;
+            _context.SaveChanges();
         }
     }
 }

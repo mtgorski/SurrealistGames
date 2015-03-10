@@ -44,6 +44,7 @@ namespace SurrealistGames.WebUI
             Kernel.Bind<IReportHelper>().To<ReportHelper>();
             Kernel.Bind<IConfig>().To<Config>().InSingletonScope();
             Kernel.Bind<IContentRepositoryFactory>().To<ContentRepositoryFactory>();
+            Kernel.Bind<IModerationHelper>().To<ModerationHelper>();
             Kernel.Rebind<IKernel>().ToMethod(_ => Kernel).InSingletonScope();
     
             AutoMapperConfiguration.Register();

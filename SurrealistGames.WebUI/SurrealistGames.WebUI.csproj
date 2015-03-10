@@ -208,6 +208,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ModerationApiController.cs" />
     <Compile Include="Controllers\ReportApiController.cs" />
     <Compile Include="Interfaces\ICustomUserProvider.cs" />
     <Compile Include="Controllers\QuestionGameController.cs" />

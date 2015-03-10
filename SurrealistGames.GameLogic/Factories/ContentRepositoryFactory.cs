@@ -34,5 +34,20 @@ namespace SurrealistGames.GameLogic.Factories
 
             throw new ArgumentException("Unsupported type");
         }
+
+        public Models.Interfaces.IContentRepository GetRepositoryFor(Type type)
+        {
+            if (type == typeof(Answer))
+            {
+                return _kernel.Get<IAnswerRepository>();
+            }
+
+            if (type == typeof(Question))
+            {
+                return _kernel.Get<IQuestionRepository>();
+            }
+
+            throw new ArgumentException("Unsupported type");
+        }
     }
 }
