@@ -40,6 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\Content.cs" />
+    <Compile Include="ApproveContentRequest.cs" />
+    <Compile Include="ApproveContentResponse.cs" />
     <Compile Include="Interfaces\IContent.cs" />
     <Compile Include="Interfaces\IContentRepository.cs" />
     <Compile Include="Interfaces\IReportRepository.cs" />

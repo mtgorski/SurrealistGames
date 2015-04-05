@@ -33,5 +33,15 @@ namespace SurrealistGames.WebUI.Controllers
 
             return _moderationHelper.RemoveContent(request);
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin, Moderator")]
+        public ApproveContentResponse ApproveContent([FromBody]ApproveContentRequest request)
+        {
+            var aspUserId = _userUtility.GetAspId(this);
+            request.RequestingUserId = _userInfoRepo.GetByAspId(aspUserId).UserInfoId;
+
+            return _moderationHelper.ApproveContent(request);
+        }
     }
 }

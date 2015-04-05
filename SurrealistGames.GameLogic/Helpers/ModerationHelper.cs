@@ -29,5 +29,20 @@ namespace SurrealistGames.GameLogic.Helpers
 
             return new RemoveContentResponse();
         }
+
+        public Models.ApproveContentResponse ApproveContent(Models.ApproveContentRequest request)
+        {
+            Type contentType = request.ContentType;
+            IContentRepository repo = _contentRepositoryFactory.GetRepositoryFor(contentType);
+
+            var content = repo.GetContentById(request.ContentId);
+            content.ApprovingUserId = request.RequestingUserId;
+            content.ApprovedOn = DateTime.UtcNow;
+            repo.Update(content);
+
+            repo.AddToOutcomes(content);
+
+            return new ApproveContentResponse();
+        }
     }
 }

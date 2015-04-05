@@ -1,4 +1,5 @@
-﻿using SurrealistGames.Models;
+﻿using AutoMapper;
+using SurrealistGames.Models;
 using SurrealistGames.Models.Abstract;
 using SurrealistGames.Models.Interfaces;
 using SurrealistGames.Repositories;
@@ -17,11 +18,13 @@ namespace SurrealistGames.Data
     {
         private readonly IRandomBehavior _rng;
         private readonly IEfDbContext _context;
+        private readonly IMappingEngine _mapper;
 
-        public EfQuestionRepository(IRandomBehavior rng, IEfDbContext dbContext)
+        public EfQuestionRepository(IRandomBehavior rng, IEfDbContext dbContext, IMappingEngine mapper)
         {
             _rng = rng;
             _context = dbContext;
+            _mapper = mapper;
         }
 
         public Models.Question GetRandom()
@@ -82,6 +85,31 @@ namespace SurrealistGames.Data
             question.RemovedOn = DateTime.UtcNow;
             question.RemovingUserId = request.RequestingUserId;
             _context.SaveChanges();
+        }
+
+        public void Update(Content content)
+        {
+            var updated = content as Question;
+            var current = _context.Questions.FirstOrDefault(q => q.QuestionId == updated.QuestionId);
+            _mapper.Map<Question, Question>(updated, current);
+            _context.SaveChanges();
+        }
+
+        public void AddToOutcomes(Content content)
+        {
+            var question = content as Question;
+            var isAlreadyAdded = _context.Database.SqlQuery<int>(
+                "select count(*) from dbo.RandomQuestion where QuestionId = @QuestionId",
+                new SqlParameter("@QuestionId", question.QuestionId)
+                ).First() > 0;
+
+            if (!isAlreadyAdded)
+            {
+                _context.Database.ExecuteSqlCommand(
+                    "insert into RandomQuestion(QuestionId, RandomQuestionID) values(@QuestionId, (select Max(RandomQuestionID) + 1 from RandomQuestion ));",
+                    new SqlParameter("QuestionId", question.QuestionId)
+                    );
+            }
         }
     }
 }

@@ -14,6 +14,9 @@ namespace SurrealistGames.GameLogic.AutoMapper
         {
             Mapper.CreateMap<ReportRequest, Report>()
                 .ForMember(d => d.SubmittedOn, o => o.MapFrom(s => DateTime.UtcNow));
+
+            Mapper.CreateMap<Question, Question>();
+            Mapper.CreateMap<Answer, Answer>();
         }
     }
 }

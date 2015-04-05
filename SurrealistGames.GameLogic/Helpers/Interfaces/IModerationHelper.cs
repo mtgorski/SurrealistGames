@@ -10,5 +10,7 @@ namespace SurrealistGames.GameLogic.Helpers.Interfaces
     public interface IModerationHelper
     {
         RemoveContentResponse RemoveContent(RemoveContentRequest request);
+
+        ApproveContentResponse ApproveContent(ApproveContentRequest request);
     }
 }

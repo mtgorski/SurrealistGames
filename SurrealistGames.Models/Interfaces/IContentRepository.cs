@@ -16,5 +16,9 @@ namespace SurrealistGames.Models.Interfaces
         Content GetContentById(int contentId);
 
         void Remove(RemoveContentRequest request);
+
+        void Update(Content content);
+
+        void AddToOutcomes(Content content);
     }
 }

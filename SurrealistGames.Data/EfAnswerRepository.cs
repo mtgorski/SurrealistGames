@@ -1,4 +1,5 @@
-﻿using SurrealistGames.Models;
+﻿using AutoMapper;
+using SurrealistGames.Models;
 using SurrealistGames.Models.Abstract;
 using SurrealistGames.Models.Interfaces;
 using SurrealistGames.Utility;
@@ -15,11 +16,13 @@ namespace SurrealistGames.Data
     {
         private readonly IRandomBehavior _rng;
         private readonly IEfDbContext _context;
+        private readonly IMappingEngine _mapper;
 
-        public EfAnswerRepository(IRandomBehavior rng, IEfDbContext context)
+        public EfAnswerRepository(IRandomBehavior rng, IEfDbContext context, IMappingEngine mapper)
         {
             _rng = rng;
             _context = context;
+            _mapper = mapper;
         }
 
         public Models.Answer GetRandom()
@@ -77,6 +80,31 @@ namespace SurrealistGames.Data
             answer.RemovedOn = DateTime.UtcNow;
             answer.RemovingUserId = request.RequestingUserId;
             _context.SaveChanges();
+        }
+
+        public void Update(Content content)
+        {
+            var updated = content as Answer;
+            var current = _context.Answers.FirstOrDefault(a => a.AnswerId == updated.AnswerId);
+            _mapper.Map<Answer, Answer>(updated, current);
+            _context.SaveChanges();
+        }
+
+        public void AddToOutcomes(Content content)
+        {
+            var answer = content as Answer;
+            var isAlreadyAdded = _context.Database.SqlQuery<int>(
+                "select count(*) from dbo.RandomAnswer where AnswerId = @AnswerId",
+                new SqlParameter("@AnswerId", answer.AnswerId)
+                ).First() > 0;
+
+            if(!isAlreadyAdded)
+            {
+                _context.Database.ExecuteSqlCommand(
+                    "insert into RandomAnswer(AnswerID, RandomAnswerID) values(@AnswerId, (select Max(RandomAnswerID) + 1 from RandomAnswer ));",
+                    new SqlParameter("AnswerId", answer.AnswerId)
+                    );
+            }
         }
     }
 }

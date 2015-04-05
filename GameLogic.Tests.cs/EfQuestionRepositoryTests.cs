@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using AutoMapper;
+using Moq;
 using NUnit.Framework;
 using SurrealistGames.Data;
 using SurrealistGames.Models;
@@ -21,6 +22,7 @@ namespace GameLogic.Tests.cs
         public Mock<DbSet<Question>> QuestionsMock { get; set; }
         public EfQuestionRepository Target { get; set; }
         public List<Report> SeedReports { get; set; }
+        public Mock<IMappingEngine> MapperMock { get; set; }
 
         public Report GivenReport { get; set; }
 
@@ -28,12 +30,13 @@ namespace GameLogic.Tests.cs
         public void SetUp()
         {
             ContextMock = new Mock<IEfDbContext>();
+            MapperMock = new Mock<IMappingEngine>();
             GivenReport = new Report();
             ReportsMock = new Mock<DbSet<Report>>();
             QuestionsMock = new Mock<DbSet<Question>>();
 
             var rng = new Mock<IRandomBehavior>();
-            Target = new EfQuestionRepository(rng.Object, ContextMock.Object);
+            Target = new EfQuestionRepository(rng.Object, ContextMock.Object, MapperMock.Object);
 
             ContextMock.Setup(m => m.Reports).Returns(ReportsMock.Object);
             ContextMock.Setup(m => m.Questions).Returns(QuestionsMock.Object);
