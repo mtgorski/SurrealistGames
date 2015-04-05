@@ -4,6 +4,14 @@
 
 $(document).ready(function () {
     $('#saveButton').prop('disabled', true);
+    $("#reportQBtn").hide();
+    $("#reportABtn").hide();
+    $("#reportQBtn .auth").click(function () {
+        onReportClick("#reportQBtn", "Q");
+    });
+    $("#reportABtn .auth").click(function () {
+        onReportClick("#reportABtn", "A");
+    });
 
     $('#prefixForm').validate({
         rules: {
@@ -19,7 +27,12 @@ $(document).ready(function () {
                 url: "/QuestionGame/SubmitQuestionAction",
                 method: "POST",
                 data: { questionContent: $("#prefix").val() },
-                success: onSubmitResponseHandler
+                success: function (data, textStatus, jqXHR) {
+                    onSubmitResponseHandler(data, textStatus, jqXHR);
+                    $("#reportABtn").show();
+                    $("#reportQBtn").hide();
+                    $("#reportABtn .auth").prop("disabled", false).html("Report");
+                }
             });
 
             $('#prefixForm .form-group').removeClass('has-success');
@@ -45,7 +58,12 @@ $(document).ready(function () {
                 url: "/QuestionGame/SubmitAnswerAction",
                 method: "POST",
                 data: { answerContent: $("#suffix").val() },
-                success: onSubmitResponseHandler
+                success: function (data, textStatus, jqXHR) {
+                    onSubmitResponseHandler(data, textStatus, jqXHR);
+                    $("#reportABtn").hide();
+                    $("#reportQBtn").show();
+                    $("#reportQBtn .auth").prop("disabled", false).html("Report");
+                }
             });
 
             $('#suffixForm .form-group').removeClass('has-success');
@@ -101,4 +119,21 @@ function onSaveClick() {
 
         }
     });
+}
+
+function onReportClick(id, type) {
+    $(id).prop("disabled", true);
+
+    var jsonRequest = {};
+    if (type == "A") {
+        jsonRequest["AnswerId"] = $('input[name="AnswerId"]').val();
+    }
+    else {
+        jsonRequest["QuestionId"] = $('input[name="QuestionId"]').val();
+    }
+
+    $.post("/api/ReportApi/", jsonRequest, function (data) {
+        $(id).html("Thanks!");
+        }
+    );
 }

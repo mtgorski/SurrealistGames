@@ -12,14 +12,42 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-8 col-sm-offset-1 well">
+        <div class="col-xs-9 col-sm-offset-1 well">
             @Html.HiddenFor(m => m.QuestionId)
             @Html.HiddenFor(m => m.AnswerId)
-            <p class="lead">Q : <span id="question"></span></p>
-            <p class="lead">A : <span id="answer"></span></p>
+            <div class="row">
+                <p class="lead col-xs-10">
+                    Q : <span id="question"></span>
+                </p>
+                <div class="col-xs-1">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <button id="reportQBtn" class="btn btn-primary auth" hidden="hidden">Report</button>
+                    }
+                    else
+                    {
+                        <button id="reportQBtn" class="btn btn-primary" hidden="hidden" disabled="disabled">Log in to report</button>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <p class="lead col-xs-10">
+                    A : <span id="answer"></span>
+                </p>
+                <div class="col-xs-1">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <button id="reportABtn" class="btn btn-primary auth" hidden="hidden">Report</button>
+                    }
+                    else
+                    {
+                        <button id="reportABtn" class="btn btn-primary" disabled="disabled" hidden="hidden">Log in to report</button>
+                    }
+                </div>   
+            </div>                               
             @if (User.Identity.IsAuthenticated)
             {
-                <button id="saveButton" class="btn btn-primary" onclick="return onSaveClick()">Save</button>
+                <button id="saveButton" class="btn btn-primary auth" onclick="return onSaveClick()">Save</button>
             }
             else
             {

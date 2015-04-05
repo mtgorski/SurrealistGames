@@ -20,7 +20,7 @@
             <button class="btn btn-primary" onclick="return onRefreshClick()">Refresh</button>
             @if (User.Identity.IsAuthenticated)
             {
-                <button id="saveButton" class="btn btn-primary" onclick="return onSaveClick()">Save</button>
+                <button id="saveButton" class="btn btn-primary auth" onclick="return onSaveClick()">Save</button>
             }
             else
             {
@@ -57,7 +57,7 @@
                     $('#answer').html(data.Answer.AnswerContent);
                     $('input[name="QuestionId"]').val(data.Question.QuestionId);
                     $('input[name="AnswerId"]').val(data.Answer.AnswerId);
-                    $("#saveButton").prop('disabled', false).html("Save");
+                    $("#saveButton .auth").prop('disabled', false).html("Save");
                 }
             });
         }

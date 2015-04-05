@@ -25,7 +25,7 @@ namespace SurrealistGames.WebUI.Controllers
             _userInfoRepo = userInfoRepo;
         }
 
-        [Authorize]
+        [Authorize(Roles="Reporter")]
         public ReportResponse Post([FromBody] SurrealistGames.Models.ReportRequest reportRequest)
         {
             var aspId = _userUtility.GetAspId(this);
