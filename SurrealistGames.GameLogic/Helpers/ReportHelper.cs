@@ -41,7 +41,18 @@ namespace SurrealistGames.GameLogic.Helpers
             var reports = GetPreviousReports(request);
             var previousNumberOfReports = reports.Distinct(new ReportComparer()).Count(); 
 
-            var numberOfReports = NewNumberOfReports(request, reports, previousNumberOfReports);
+            var newNumberOfReports = NewNumberOfReports(request, reports, previousNumberOfReports);
+
+            if(previousNumberOfReports == newNumberOfReports)
+            {
+                return new ReportResponse
+                {
+                    NumberOfReports = newNumberOfReports,
+                    ReportsDisabledOn = _config.ReportsDisabledOn,
+                    UserHasReportedBefore = true,
+                    ContentIsModeratorApproved = ContentIsModeratorApproved(request)
+                };
+            }
 
             _reportRepository.Save(report);
 
@@ -49,13 +60,13 @@ namespace SurrealistGames.GameLogic.Helpers
 
             if(!contentIsModeratorApproved)
             {
-                DecideToDisable(request, numberOfReports);
+                DecideToDisable(request, newNumberOfReports);
             }
 
             return new ReportResponse 
-                        { NumberOfReports = numberOfReports, 
+                        { NumberOfReports = newNumberOfReports, 
                           ReportsDisabledOn = _config.ReportsDisabledOn,
-                          UserHasReportedBefore = previousNumberOfReports == numberOfReports,
+                          UserHasReportedBefore = false,
                           ContentIsModeratorApproved = contentIsModeratorApproved
                         };
         }

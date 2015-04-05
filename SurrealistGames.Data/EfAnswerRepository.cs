@@ -67,7 +67,10 @@ namespace SurrealistGames.Data
         public IEnumerable<Content> GetTopReportedAndUnmoderatedContent(int numberOfAnswers)
         {
             return _context.Answers
-                        .Where(a => !a.ApprovingUserId.HasValue && !a.RemovingUserId.HasValue)
+                        .Where(
+                            a => !a.ApprovingUserId.HasValue 
+                                    && !a.RemovingUserId.HasValue
+                                    && a.Reports.Count > 0)
                         .OrderByDescending(a => a.Reports.Count)
                         .Take(numberOfAnswers)
                         .ToList();

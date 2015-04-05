@@ -105,7 +105,7 @@ namespace GameLogic.Tests.cs
             {
                 new Question(), new Question(), new Question(), new Question(), new Question()
             };
-            questions.ForEach(q => q.Reports = new List<Report>());
+            questions.ForEach(q => q.Reports = new List<Report> {new Report()});
             QuestionsMock.SetupData<Question>(questions);
 
             var result = Target.GetTopReportedAndUnmoderatedContent(3);
@@ -181,7 +181,7 @@ namespace GameLogic.Tests.cs
             var result = Target.GetTopReportedAndUnmoderatedContent(10);
             var questionIds = result.Select(x => x.Id).ToList();
 
-            CollectionAssert.AreEqual(new List<int> { 3, 2, 1, 4 }, questionIds);
+            CollectionAssert.AreEqual(new List<int> { 3, 2, 1}, questionIds);
         }
     }
 }
