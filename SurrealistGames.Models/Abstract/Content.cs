@@ -25,6 +25,14 @@ namespace SurrealistGames.Models.Abstract
             }
         }
 
+        public virtual bool IsModerated 
+        {
+            get 
+            {
+                return ApprovingUserId.HasValue || RemovingUserId.HasValue;
+            }
+        }
+
         public virtual ICollection<Report> Reports { get; set; }
     }
 }

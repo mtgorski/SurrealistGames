@@ -23,6 +23,13 @@ namespace SurrealistGames.GameLogic.Helpers
         {
             Type contentType = request.AnswerId.HasValue ? typeof(Answer) : typeof(Question);
             IContentRepository repo = _contentRepositoryFactory.GetRepositoryFor(contentType);
+            var content = repo.GetContentById(request.ContentId);
+            if(content.IsModerated)
+            {
+                return new RemoveContentResponse();
+            }
+
+
             repo.Disable(request.ContentId);
 
             repo.Remove(request);
@@ -36,6 +43,11 @@ namespace SurrealistGames.GameLogic.Helpers
             IContentRepository repo = _contentRepositoryFactory.GetRepositoryFor(contentType);
 
             var content = repo.GetContentById(request.ContentId);
+            if(content.IsModerated)
+            {
+                return new ApproveContentResponse();
+            }
+
             content.ApprovingUserId = request.RequestingUserId;
             content.ApprovedOn = DateTime.UtcNow;
             repo.Update(content);
