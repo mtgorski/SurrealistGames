@@ -53,9 +53,20 @@
                         );
 
                     $("#content" + contentId + " .content").html(contentAbbreviation + contentComposite.Value);
-                    $("#content" + contentId + " .buttons").html("<button class=\"btn btn-primary col-sm-offset-1 approve\" onClick=\"approveContent(" + contentId + ", " + "'" + contentType + "')\">Approve</button><button class=\"btn btn-primary col-sm-offset-1 remove\" onClick=\"removeContent(" + contentId + ", " + "'" + contentType + "')\">Remove</button>");
+                    $("#content" + contentId + " .buttons").html("<button class=\"btn btn-primary col-sm-offset-1 approve\">Approve</button><button class=\"btn btn-primary col-sm-offset-1 remove\">Remove</button>");
+
+                    $("#content" + contentId + " .remove").off('click').click(removeFcnFactory(contentId, contentType));
+                    $("#content" + contentId + " .approve").off('click').click(approveFcnFactory(contentId, contentType));
                 }
             });
+        }
+
+        function removeFcnFactory(contentId, contentType) {
+            return function () { removeContent(contentId, contentType) };
+        }
+
+        function approveFcnFactory(contentId, contentType) {
+            return function () { approveContent(contentId, contentType) };
         }
 
         function removeContent(contentId, contentType){
