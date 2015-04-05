@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = "Unmoderated Content";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6">
+            <h2>Mod Dashboard</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-3 col-sm-offset-1">
+            <select id="contentDropdown" name="contentType">
+                <option value="questions">Questions</option>
+                <option value="answers">Answers</option>
+            </select>
+        </div>
+       <div class="col-xs-1">
+           <button id="getButton" class="btn btn-primary" onclick="loadContent()">Get Reported Content</button>
+       </div>
+    </div>
+    <div id="content" class="row">
+
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(
+            function () {
+                loadContent();
+            }
+          );
+        
+        function loadContent() {
+            $("#content").html("");
+            var contentType = $("#contentDropdown").val();
+            var contentAbbreviation = contentType == "questions" ? "Q: " : "A: " 
+            var url = "/api/reportapi/gettopunmoderated" + contentType + "?numberOfResults=10";
+            $.get(url, function (data) {
+
+                if (data.length == 0) {
+                    $("#content").html("No results found.");
+                }
+
+                for (var i = 0; i < data.length; i++) {
+                    var contentComposite = data[i];
+                    var contentId = contentComposite.Id;
+
+                    $("#content").append(
+                        "<div id=\"content" + contentId + "\" class=\"well col-xs-6 col-sm-offset-1\"><div class=\"row content\"></div><div class=\"buttons\"></div></div>"
+                        );
+
+                    $("#content" + contentId + " .content").html(contentAbbreviation + contentComposite.Value);
+                    $("#content" + contentId + " .buttons").html("<button class=\"btn btn-primary col-sm-offset-1 approve\" onClick=\"approveContent(" + contentId + ", " + "'" + contentType + "')\">Approve</button><button class=\"btn btn-primary col-sm-offset-1 remove\" onClick=\"removeContent(" + contentId + ", " + "'" + contentType + "')\">Remove</button>");
+                }
+            });
+        }
+
+        function removeContent(contentId, contentType){
+            var requestDataIdStr = contentType == "questions" ? "questionId" : "answerId";
+            var requestData = {};
+            requestData[requestDataIdStr] = contentId;
+            $.post(
+                "/api/moderationapi/removeContent",
+                requestData,
+                function (data) {
+                    $("#content" + contentId).remove();
+                }
+            );
+        }
+
+        function approveContent(contentId, contentType) {
+            var requestDataIdStr = contentType == "questions" ? "questionId" : "answerId";
+            var requestData = {};
+            requestData[requestDataIdStr] = contentId;
+            $.post(
+                "/api/moderationapi/approveContent",
+                requestData,
+                function (data) {
+                    $("#content" + contentId).remove();
+                }
+            );
+        }
+    </script>
+}

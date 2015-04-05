@@ -209,6 +209,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ModerationApiController.cs" />
+    <Compile Include="Controllers\ModerationController.cs" />
     <Compile Include="Controllers\ReportApiController.cs" />
     <Compile Include="Interfaces\ICustomUserProvider.cs" />
     <Compile Include="Controllers\QuestionGameController.cs" />
@@ -282,6 +283,7 @@
     <Content Include="Views\QuestionGame\Index.cshtml" />
     <Content Include="Views\QuestionGame\Play.cshtml" />
     <Content Include="Views\SavedQuestionGameResult\SavedResults.cshtml" />
+    <Content Include="Views\Moderation\UnmoderatedContent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
